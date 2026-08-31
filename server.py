@@ -5,7 +5,7 @@ import time
 import os
 import sys
 
-PORT = 8080
+PORT = int(os.environ.get("PORT", 4500))
 
 with open(os.path.join(os.path.dirname(__file__), "index.html"), "r", encoding="utf-8") as f:
     HTML_CONTENT = f.read()
