@@ -38,7 +38,6 @@ class RunnerPoolManager:
     def allocate_runner(self, required_tags: List[str] = None) -> Optional[str]:
         now = time.time()
         for runner_id, runner in self.runners.items():
-            # Check timeout
             if now - runner["last_heartbeat"] > self.heartbeat_timeout:
                 runner["status"] = "OFFLINE"
                 continue
