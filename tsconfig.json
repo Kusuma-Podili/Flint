@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nexusops/shared-types": ["packages/shared-types/src"],
+      "@nexusops/dag-engine": ["packages/dag-engine/src"],
+      "@nexusops/iac-parser": ["packages/iac-parser/src"],
+      "@nexusops/policy-engine": ["packages/policy-engine/src"],
+      "@nexusops/sdk-ts": ["packages/sdk-ts/src"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".next", "coverage"]
+}
