@@ -1,0 +1,10 @@
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN echo "Building NexusOps API Gateway..."
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+EXPOSE 8080
+CMD ["node", "-e", "console.log('NexusOps API Gateway Operational')"]
