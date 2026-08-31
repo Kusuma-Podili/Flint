@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flint - Enterprise DevOps Automation Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #090d16; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+  </style>
+</head>
+<body class="text-gray-100 min-h-screen flex flex-col">
+  <header class="border-b border-gray-800 bg-[#0d131f] px-8 py-4 flex items-center justify-between shadow-lg">
+    <div class="flex items-center space-x-3">
+      <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-blue-600 to-emerald-400 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-blue-500/20">
+        F
+      </div>
+      <div>
+        <span class="text-2xl font-black tracking-wider text-white">FLINT <span class="text-xs font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30 ml-2">ENTERPRISE PLATFORM</span></span>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <span class="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20">
+        ● Live Local Server Active
+      </span>
+      <a href="https://github.com/Kusuma-Podili/Flint" target="_blank" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-200 px-3.5 py-1.5 rounded-lg border border-gray-700 font-medium transition">
+        GitHub Repository ↗
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 p-8 max-w-7xl mx-auto w-full space-y-8">
+    <!-- Metrics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800 shadow-xl">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Codebase Scale</div>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span class="text-3xl font-black text-white">57,445</span>
+          <span class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">LOC</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">243 files across 5 PR branches</div>
+      </div>
+
+      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800 shadow-xl">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Automated Tests</div>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span class="text-3xl font-black text-emerald-400">30 / 30</span>
+          <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">100% Pass</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">Unit, Integration & E2E Suites</div>
+      </div>
+
+      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800 shadow-xl">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Security Governance</div>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span class="text-3xl font-black text-emerald-400">98.5%</span>
+          <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">SOC2 / CIS</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">OPA Rego & Entropy Scanner Active</div>
+      </div>
+
+      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800 shadow-xl">
+        <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Kubernetes Clusters</div>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span class="text-3xl font-black text-white">6 Nodes</span>
+          <span class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">Canary Ready</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">Multi-cloud AWS / GCP / Azure</div>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Visual DAG -->
+        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-6 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-white">Topological Pipeline DAG Studio</h2>
+              <p class="text-xs text-gray-400">Dependency-graph resolved parallel execution stages</p>
+            </div>
+            <button onclick="triggerRun()" id="btn-run" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-4 py-2 rounded-lg transition shadow-lg shadow-blue-500/20">
+              ▶ Trigger Pipeline Run
+            </button>
+          </div>
+
+          <div class="bg-[#090d16] p-6 rounded-xl border border-gray-800/80 flex flex-wrap items-center justify-between gap-3">
+            <div class="p-3 bg-gray-900 border border-blue-500/40 rounded-xl text-center shadow-lg w-32">
+              <div class="text-[10px] text-gray-500 font-bold uppercase">Stage 1</div>
+              <div class="font-bold text-xs text-blue-400 mt-1">git-checkout</div>
+              <div class="text-[9px] text-emerald-400 mt-1">SUCCESS</div>
+            </div>
+            <span class="text-gray-600 font-bold">➔</span>
+            <div class="space-y-2">
+              <div class="p-2.5 bg-gray-900 border border-blue-500/40 rounded-xl text-center shadow-lg w-36">
+                <div class="text-[10px] text-gray-500 font-bold uppercase">Stage 2 (Parallel)</div>
+                <div class="font-bold text-xs text-blue-400 mt-0.5">sast-security</div>
+                <div class="text-[9px] text-emerald-400 mt-0.5">PASSED</div>
+              </div>
+              <div class="p-2.5 bg-gray-900 border border-blue-500/40 rounded-xl text-center shadow-lg w-36">
+                <div class="text-[10px] text-gray-500 font-bold uppercase">Stage 2 (Parallel)</div>
+                <div class="font-bold text-xs text-blue-400 mt-0.5">unit-test-matrix</div>
+                <div class="text-[9px] text-emerald-400 mt-0.5">30/30 OK</div>
+              </div>
+            </div>
+            <span class="text-gray-600 font-bold">➔</span>
+            <div class="p-3 bg-gray-900 border border-blue-500/40 rounded-xl text-center shadow-lg w-36">
+              <div class="text-[10px] text-gray-500 font-bold uppercase">Stage 3</div>
+              <div class="font-bold text-xs text-blue-400 mt-1">docker-build</div>
+              <div class="text-[9px] text-emerald-400 mt-1">PUSHED</div>
+            </div>
+            <span class="text-gray-600 font-bold">➔</span>
+            <div class="p-3 bg-gray-900 border border-emerald-500/40 rounded-xl text-center shadow-lg w-36 bg-emerald-950/20">
+              <div class="text-[10px] text-emerald-500 font-bold uppercase">Stage 4</div>
+              <div class="font-bold text-xs text-emerald-400 mt-1">k8s-canary</div>
+              <div class="text-[9px] text-emerald-400 mt-1" id="k8s-status-tag">ACTIVE 50%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Terminal -->
+        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-3">
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <span class="text-xs font-mono text-gray-400">nexus-agent-daemon-01 (live terminal stream)</span>
+            <span class="text-xs text-emerald-400 font-mono">STDOUT: STREAMING</span>
+          </div>
+          <div id="terminal-box" class="bg-[#090d16] font-mono text-xs text-gray-300 p-4 rounded-xl h-64 overflow-y-auto custom-scroll space-y-1.5 border border-gray-800/80">
+            <div class="text-gray-500">[SYSTEM] Initializing Flint Execution Daemon v1.0.0...</div>
+            <div class="text-blue-400">[AUTH] Validated API token nx_a30fb80b (Role: DEVOPS_ENGINEER)</div>
+            <div class="text-emerald-400">[CRYPTO] AES-256 Envelope DEK decrypted securely for tenant acme-corp</div>
+            <div class="text-purple-400">[AUDIT] Cryptographic Hash Chaining entry recorded with SHA-256</div>
+            <div class="text-yellow-400">[DAG] Resolved 4 execution stages without cycles</div>
+            <div class="text-gray-300">[RUNNER] Step 1: git-checkout commit sha 888d91b (duration: 120ms)</div>
+            <div class="text-gray-300">[RUNNER] Step 2: running unit & security scan in parallel container</div>
+            <div class="text-emerald-400">[TEST] 30 test cases executed -> 100% OK</div>
+            <div class="text-blue-400">[CANARY] Traffic shifted to 50% on K8s cluster (health error rate: 0.00%)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls & Links -->
+      <div class="space-y-6">
+        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-4">
+          <h3 class="text-sm font-bold text-white flex items-center justify-between">
+            <span>Canary Rollout Shifter</span>
+            <span id="canary-badge" class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono">50% Weight</span>
+          </h3>
+          <div>
+            <input type="range" min="0" max="100" step="25" value="50" id="canary-slider" oninput="updateCanary(this.value)" class="w-full accent-emerald-500 cursor-pointer">
+          </div>
+          <div class="p-3 bg-gray-900/70 rounded-xl text-xs space-y-1.5 border border-gray-800">
+            <div class="flex justify-between text-gray-400"><span>Error Rate:</span><span class="text-emerald-400 font-bold">0.02% (Healthy)</span></div>
+            <div class="flex justify-between text-gray-400"><span>P99 Latency:</span><span class="text-blue-400 font-bold">18ms</span></div>
+            <div class="flex justify-between text-gray-400"><span>Auto Rollback:</span><span class="text-emerald-400 font-bold">Armed</span></div>
+          </div>
+        </div>
+
+        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-3">
+          <h3 class="text-sm font-bold text-white">5 Pull Request Branches (GitHub)</h3>
+          <div class="space-y-2 text-xs">
+            <a href="https://github.com/Kusuma-Podili/Flint/compare/main...feature/pr1-core-architecture-auth" target="_blank" class="block p-2 rounded bg-gray-900 hover:bg-gray-800 text-blue-400 hover:underline transition">PR 1: Core Architecture & Auth ➔</a>
+            <a href="https://github.com/Kusuma-Podili/Flint/compare/main...feature/pr2-pipeline-dag-runner-agent" target="_blank" class="block p-2 rounded bg-gray-900 hover:bg-gray-800 text-blue-400 hover:underline transition">PR 2: Pipeline DAG & Agent ➔</a>
+            <a href="https://github.com/Kusuma-Podili/Flint/compare/main...feature/pr3-iac-gitops-k8s-controller" target="_blank" class="block p-2 rounded bg-gray-900 hover:bg-gray-800 text-blue-400 hover:underline transition">PR 3: Multi-Cloud IaC & K8s ➔</a>
+            <a href="https://github.com/Kusuma-Podili/Flint/compare/main...feature/pr4-devsecops-policy-observability" target="_blank" class="block p-2 rounded bg-gray-900 hover:bg-gray-800 text-blue-400 hover:underline transition">PR 4: DevSecOps & Telemetry ➔</a>
+            <a href="https://github.com/Kusuma-Podili/Flint/compare/main...feature/pr5-dashboard-sdk-e2e" target="_blank" class="block p-2 rounded bg-gray-900 hover:bg-gray-800 text-blue-400 hover:underline transition">PR 5: Next.js Studio & E2E Tests ➔</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function updateCanary(val) {
+      document.getElementById('canary-badge').innerText = val + '% Weight';
+      document.getElementById('k8s-status-tag').innerText = 'ACTIVE ' + val + '%';
+      appendLog('[CANARY] Shifted Kubernetes traffic weight to ' + val + '% (P99: 18ms, Errors: 0.00%)', 'text-emerald-400');
+    }
+
+    function triggerRun() {
+      const btn = document.getElementById('btn-run');
+      btn.innerText = 'Executing Pipeline...';
+      btn.disabled = true;
+      appendLog('[PIPELINE] New manual run triggered via Web Console', 'text-yellow-400');
+
+      fetch('/api/v1/pipelines/trigger')
+        .then(r => r.json())
+        .then(data => {
+          appendLog('[RUNNER] Run ID ' + data.run_id + ' dispatched with 4 parallel stages', 'text-blue-400');
+          appendLog('[TEST] Executing test suite -> 30/30 tests passed in 0.4s', 'text-emerald-400');
+          setTimeout(() => {
+            btn.innerText = '▶ Trigger Pipeline Run';
+            btn.disabled = false;
+          }, 1500);
+        });
+    }
+
+    function appendLog(msg, colorClass) {
+      const t = document.getElementById('terminal-box');
+      const div = document.createElement('div');
+      div.className = colorClass || 'text-gray-300';
+      const timeStr = new Date().toLocaleTimeString();
+      div.innerText = '[' + timeStr + '] ' + msg;
+      t.appendChild(div);
+      t.scrollTop = t.scrollHeight;
+    }
+  </script>
+</body>
+</html>
