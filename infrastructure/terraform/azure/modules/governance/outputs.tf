@@ -1,9 +1,0 @@
-output "governance_status" {
-  value       = "healthy"
-  description = "Status of governance module in azure"
-}
-
-output "governance_id" {
-  value       = "${var.environment}-governance-active"
-  description = "Resource ID"
-}
