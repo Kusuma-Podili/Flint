@@ -34,8 +34,7 @@ class MetricsAggregator:
         for key, val in self.gauges.items():
             lines.append(f"# TYPE {key.split('{')[0]} gauge")
             lines.append(f"{key} {val}")
-        return "
-".join(lines)
+        return "\n".join(lines)
 
 
 class AlertManager:
