@@ -93,7 +93,6 @@ class TrivyVulnerabilityParser:
                     "title": vuln.get("Title", "No title")
                 })
 
-        # Compliance score: 100 - (critical * 15 + high * 5 + medium * 1)
         score = max(0, 100 - (critical * 15 + high * 5 + medium * 1))
 
         return {
