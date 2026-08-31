@@ -1,9 +1,0 @@
-apiVersion: v2
-name: nexusops
-description: Enterprise DevOps Automation, GitOps & Continuous Deployment Platform
-type: application
-version: 1.0.0
-appVersion: "1.0.0"
-maintainers:
-  - name: NexusOps Engineering
-    email: platform-eng@nexusops.dev
