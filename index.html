@@ -1,290 +1,1967 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flint - Cloud Automation & Continuous Delivery Platform</title>
+  <title>Flint — Enterprise Cloud Automation & Continuous Delivery</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              900: '#064e3b',
+            },
+            slate: {
+              850: '#151e2e',
+              900: '#0f172a',
+              950: '#090d16',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    body { background-color: #0B0F19; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    .custom-scroll::-webkit-scrollbar { width: 6px; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
   </style>
 </head>
-<body class="text-gray-100 min-h-screen flex flex-col">
-  <!-- Top Navigation Bar -->
-  <header class="border-b border-gray-800/80 bg-[#111827]/90 backdrop-blur sticky top-0 z-50 px-8 py-3.5 flex items-center justify-between shadow-md">
-    <div class="flex items-center space-x-3">
-      <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-black text-white text-lg shadow-md shadow-blue-500/20">
-        F
-      </div>
-      <div>
-        <span class="text-xl font-bold tracking-tight text-white">Flint <span class="text-xs font-medium text-gray-400 ml-1">Cloud Automation Platform</span></span>
-      </div>
-    </div>
-    
-    <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
-      <a href="#pipelines" class="text-blue-400 font-semibold flex items-center space-x-1.5">
-        <i data-lucide="git-branch" class="w-4 h-4"></i>
-        <span>Pipelines</span>
-      </a>
-      <a href="#deployments" class="hover:text-white transition flex items-center space-x-1.5">
-        <i data-lucide="cloud" class="w-4 h-4"></i>
-        <span>Deployments</span>
-      </a>
-      <a href="#iac" class="hover:text-white transition flex items-center space-x-1.5">
-        <i data-lucide="server" class="w-4 h-4"></i>
-        <span>Infrastructure</span>
-      </a>
-      <a href="#security" class="hover:text-white transition flex items-center space-x-1.5">
-        <i data-lucide="shield-check" class="w-4 h-4"></i>
-        <span>Security</span>
-      </a>
-    </nav>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col custom-scrollbar">
 
-    <div class="flex items-center space-x-3">
-      <div class="flex items-center space-x-2 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-lg text-xs">
-        <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-gray-300 font-medium">Environment: <strong class="text-white">Production (US-East)</strong></span>
-      </div>
-    </div>
-  </header>
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-  <!-- Main User Workspace -->
-  <main class="flex-1 p-8 max-w-7xl mx-auto w-full space-y-8">
-    
-    <!-- Platform Value Overview -->
-    <div class="bg-gradient-to-r from-blue-900/30 via-indigo-900/20 to-purple-900/30 border border-blue-500/20 rounded-2xl p-6 relative overflow-hidden">
-      <div class="max-w-3xl">
-        <h1 class="text-2xl font-extrabold text-white tracking-tight">Enterprise Automated Delivery & Cloud Control Plane</h1>
-        <p class="text-sm text-gray-300 mt-2 leading-relaxed">
-          Flint automates your entire software release lifecycle: build and test applications, provision cloud infrastructure (AWS/GCP/Azure), scan security vulnerabilities, and perform zero-downtime Canary deployments with live monitoring.
-        </p>
-      </div>
-    </div>
+  <!-- Global Modal Container -->
+  <div id="modal-container" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"></div>
 
-    <!-- 4 Real-World Business Use Cases -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800/80 shadow-lg">
-        <div class="h-9 w-9 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-3">
-          <i data-lucide="rocket" class="w-5 h-5"></i>
+  <!-- ========================================================================= -->
+  <!-- 1. SIGN IN VIEW (Shown when unauthenticated) -->
+  <!-- ========================================================================= -->
+  <div id="view-login" class="flex-1 flex items-center justify-center p-4 min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+      <!-- Glow Effect -->
+      <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-4 shadow-inner">
+          <i class="fa-solid fa-cube text-2xl"></i>
         </div>
-        <h3 class="font-bold text-sm text-white">Automated CI/CD</h3>
-        <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Build, test, and containerize code commits automatically with parallel DAG execution.</p>
+        <h1 class="text-2xl font-bold text-white tracking-tight">Sign in to Flint</h1>
+        <p class="text-slate-400 text-sm mt-1">Enterprise Cloud Automation & Delivery Platform</p>
       </div>
 
-      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800/80 shadow-lg">
-        <div class="h-9 w-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-3">
-          <i data-lucide="sliders" class="w-5 h-5"></i>
+      <!-- Sign In Form -->
+      <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Email Address</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i class="fa-regular fa-envelope"></i>
+            </span>
+            <input type="email" id="login-email" required placeholder="admin@gmail.com"
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-850 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+          </div>
         </div>
-        <h3 class="font-bold text-sm text-white">Zero-Downtime Rollouts</h3>
-        <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Shift production user traffic progressively (10% → 100%) with automated health rollbacks.</p>
-      </div>
 
-      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800/80 shadow-lg">
-        <div class="h-9 w-9 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-3">
-          <i data-lucide="layers" class="w-5 h-5"></i>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="login-password" required placeholder="••••••••••••"
+              class="w-full pl-10 pr-10 py-2.5 bg-slate-850 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+            <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white">
+              <i class="fa-regular fa-eye" id="login-password-eye"></i>
+            </button>
+          </div>
         </div>
-        <h3 class="font-bold text-sm text-white">Cloud Infrastructure</h3>
-        <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Provision multi-cloud Terraform resources, track costs, and auto-detect drift.</p>
-      </div>
 
-      <div class="bg-[#111827] p-5 rounded-2xl border border-gray-800/80 shadow-lg">
-        <div class="h-9 w-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-3">
-          <i data-lucide="lock" class="w-5 h-5"></i>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center space-x-2 text-slate-400 cursor-pointer">
+            <input type="checkbox" id="login-remember" class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
+            <span>Remember me</span>
+          </label>
+          <span class="text-slate-500">Local Enterprise Auth</span>
         </div>
-        <h3 class="font-bold text-sm text-white">DevSecOps & Audit</h3>
-        <p class="text-xs text-gray-400 mt-1.5 leading-relaxed">Block leaked secrets, scan CVE vulnerabilities, and maintain tamper-evident audit logs.</p>
-      </div>
-    </div>
 
-    <!-- Interactive Execution Center -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Left 2 Cols: Visual Workflow & Live Logs -->
-      <div class="lg:col-span-2 space-y-6">
-        
-        <!-- Live Workflow Engine -->
-        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-6 shadow-xl space-y-5">
-          <div class="flex items-center justify-between">
-            <div>
-              <h2 class="text-base font-bold text-white flex items-center space-x-2">
-                <span>Active Deployment Pipeline</span>
-                <span class="text-xs font-normal text-gray-400">(Production Web Service)</span>
-              </h2>
-              <p class="text-xs text-gray-400 mt-0.5">Topological stage resolution & parallel container execution</p>
+        <!-- Error Banner -->
+        <div id="login-error" class="hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center space-x-2">
+          <i class="fa-solid fa-triangle-exclamation flex-shrink-0"></i>
+          <span id="login-error-text">Invalid credentials</span>
+        </div>
+
+        <button type="submit" id="login-btn" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/20">
+          <span id="login-btn-text">Sign In</span>
+          <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
+        </button>
+      </form>
+
+      <!-- Quick Demo Account Selector -->
+      <div class="mt-8 pt-6 border-t border-slate-800">
+        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider text-center mb-3">Quick Login (Demo Accounts)</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="quickFill('admin@gmail.com', 'Admin@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-purple-400 group-hover:text-purple-300">ADMIN</span>
+              <i class="fa-solid fa-crown text-[10px] text-purple-400"></i>
             </div>
-            <button onclick="triggerDeployment()" id="btn-deploy" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-blue-500/20 flex items-center space-x-2">
-              <i data-lucide="play" class="w-3.5 h-3.5"></i>
-              <span>Deploy Application</span>
+            <p class="text-[11px] text-slate-400 truncate">admin@gmail.com</p>
+          </button>
+
+          <button type="button" onclick="quickFill('devops@gmail.com', 'DevOps@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-blue-400 group-hover:text-blue-300">DEVOPS</span>
+              <i class="fa-solid fa-gears text-[10px] text-blue-400"></i>
+            </div>
+            <p class="text-[11px] text-slate-400 truncate">devops@gmail.com</p>
+          </button>
+
+          <button type="button" onclick="quickFill('developer@gmail.com', 'Developer@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-emerald-400 group-hover:text-emerald-300">DEVELOPER</span>
+              <i class="fa-solid fa-code text-[10px] text-emerald-400"></i>
+            </div>
+            <p class="text-[11px] text-slate-400 truncate">developer@gmail.com</p>
+          </button>
+
+          <button type="button" onclick="quickFill('viewer@gmail.com', 'Viewer@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-slate-400 group-hover:text-slate-300">VIEWER</span>
+              <i class="fa-solid fa-eye text-[10px] text-slate-400"></i>
+            </div>
+            <p class="text-[11px] text-slate-400 truncate">viewer@gmail.com</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN APPLICATION SHELL (Shown when authenticated) -->
+  <!-- ========================================================================= -->
+  <div id="view-app" class="flex-1 flex flex-col hidden h-screen overflow-hidden">
+    
+    <!-- Top Navigation -->
+    <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-20 flex-shrink-0">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+          <i class="fa-solid fa-cube"></i>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="font-bold text-base text-white tracking-tight">FLINT</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 font-mono">v1.0.0</span>
+        </div>
+        <div class="h-4 w-px bg-slate-800 mx-2"></div>
+        <div class="hidden sm:flex items-center space-x-1.5 text-xs text-slate-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Cluster: <strong class="text-slate-200">Production (US-East)</strong></span>
+        </div>
+      </div>
+
+      <!-- User Profile & Actions -->
+      <div class="flex items-center space-x-4">
+        <div id="header-user-badge" class="flex items-center space-x-2.5 text-xs bg-slate-850 border border-slate-800 rounded-lg px-3 py-1.5">
+          <div class="w-6 h-6 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-bold text-xs" id="user-avatar">
+            A
+          </div>
+          <div class="flex flex-col text-left">
+            <span class="font-medium text-slate-200" id="user-email-display">admin@gmail.com</span>
+            <span class="text-[10px] font-semibold text-emerald-400 uppercase" id="user-role-display">ADMIN</span>
+          </div>
+        </div>
+
+        <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-slate-800 transition flex items-center space-x-1" title="Sign Out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace (Sidebar + Content) -->
+    <div class="flex-1 flex overflow-hidden">
+      
+      <!-- Sidebar Navigation -->
+      <aside class="w-60 bg-slate-900/90 border-r border-slate-800 flex flex-col justify-between p-3 flex-shrink-0 select-none overflow-y-auto custom-scrollbar">
+        <div class="space-y-1">
+          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 mb-2">Core Services</p>
+          
+          <button onclick="navigatePage('dashboard')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="dashboard">
+            <i class="fa-solid fa-chart-pie w-4 text-emerald-400"></i>
+            <span>Dashboard</span>
+          </button>
+
+          <button onclick="navigatePage('pipelines')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="pipelines">
+            <i class="fa-solid fa-diagram-project w-4 text-blue-400"></i>
+            <span>Pipelines (DAG)</span>
+          </button>
+
+          <button onclick="navigatePage('deployments')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="deployments">
+            <i class="fa-solid fa-rocket w-4 text-purple-400"></i>
+            <span>Deployments</span>
+          </button>
+
+          <button onclick="navigatePage('infrastructure')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="infrastructure">
+            <i class="fa-solid fa-server w-4 text-amber-400"></i>
+            <span>Infrastructure (IaC)</span>
+          </button>
+
+          <button onclick="navigatePage('security')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="security">
+            <i class="fa-solid fa-shield-halved w-4 text-rose-400"></i>
+            <span>Security & OPA</span>
+          </button>
+
+          <button onclick="navigatePage('gitops')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="gitops">
+            <i class="fa-brands fa-git-alt w-4 text-orange-400"></i>
+            <span>GitOps Sync</span>
+          </button>
+
+          <button onclick="navigatePage('runners')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="runners">
+            <i class="fa-solid fa-microchip w-4 text-cyan-400"></i>
+            <span>Worker Runners</span>
+          </button>
+
+          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 pt-4 mb-2">Telemetry & Audit</p>
+
+          <button onclick="navigatePage('monitoring')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="monitoring">
+            <i class="fa-solid fa-gauge-high w-4 text-indigo-400"></i>
+            <span>Monitoring</span>
+          </button>
+
+          <button onclick="navigatePage('logs')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="logs">
+            <i class="fa-solid fa-terminal w-4 text-yellow-400"></i>
+            <span>Central Logs</span>
+          </button>
+
+          <button onclick="navigatePage('audit')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="audit">
+            <i class="fa-solid fa-link w-4 text-emerald-400"></i>
+            <span>Audit Trail (SHA-256)</span>
+          </button>
+
+          <button onclick="navigatePage('reports')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="reports">
+            <i class="fa-solid fa-file-contract w-4 text-teal-400"></i>
+            <span>Executive Reports</span>
+          </button>
+
+          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 pt-4 mb-2">Management</p>
+
+          <button id="nav-users-btn" onclick="navigatePage('users')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="users">
+            <i class="fa-solid fa-users-gear w-4 text-pink-400"></i>
+            <span>User Management</span>
+          </button>
+
+          <button onclick="navigatePage('settings')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="settings">
+            <i class="fa-solid fa-sliders w-4 text-slate-400"></i>
+            <span>Settings</span>
+          </button>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800/80 text-[11px] text-slate-500 px-3">
+          <p>Flint Control Plane</p>
+          <p class="text-[10px] text-slate-600">Pure Local Simulation</p>
+        </div>
+      </aside>
+
+      <!-- Main Dynamic Content Region -->
+      <main class="flex-1 bg-slate-950 overflow-y-auto p-6 custom-scrollbar" id="content-area">
+        <!-- Rendered Page Components will inject here -->
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 3. JAVASCRIPT LOGIC & API CLIENT -->
+  <!-- ========================================================================= -->
+  <script>
+    // --- State Variables ---
+    let currentUser = null;
+    let authToken = localStorage.getItem('flint_token') || '';
+    let currentPage = 'dashboard';
+    let pollInterval = null;
+
+    // --- API Request Wrapper ---
+    async function apiRequest(endpoint, method = 'GET', data = null) {
+      const headers = { 'Content-Type': 'application/json' };
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
+      const options = { method, headers };
+      if (data && method !== 'GET') {
+        options.body = JSON.stringify(data);
+      }
+
+      try {
+        const response = await fetch(endpoint, options);
+        if (response.status === 401) {
+          showToast('Session expired. Please sign in.', 'error');
+          handleLogout();
+          return null;
+        }
+        if (response.status === 403) {
+          showToast('Forbidden: Your role does not have permission for this action.', 'error');
+          return null;
+        }
+        const resData = await response.json();
+        if (!response.ok) {
+          showToast(resData.error || 'Operation failed', 'error');
+          return null;
+        }
+        return resData;
+      } catch (err) {
+        console.error('API Error on', endpoint, err);
+        showToast('Network error connecting to Flint control plane', 'error');
+        return null;
+      }
+    }
+
+    // --- Toast Notification System ---
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const icons = {
+        success: 'fa-circle-check text-emerald-400',
+        error: 'fa-triangle-exclamation text-rose-400',
+        warning: 'fa-circle-exclamation text-amber-400',
+        info: 'fa-circle-info text-blue-400'
+      };
+      const borders = {
+        success: 'border-emerald-500/30 bg-slate-900',
+        error: 'border-rose-500/30 bg-slate-900',
+        warning: 'border-amber-500/30 bg-slate-900',
+        info: 'border-blue-500/30 bg-slate-900'
+      };
+
+      toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 rounded-xl border ${borders[type]} text-slate-100 text-xs shadow-xl transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icons[type]} text-base flex-shrink-0"></i>
+        <span class="flex-1">${message}</span>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // --- Password Visibility Toggle ---
+    function togglePasswordVisibility(fieldId) {
+      const field = document.getElementById(fieldId);
+      const eye = document.getElementById(fieldId + '-eye');
+      if (field.type === 'password') {
+        field.type = 'text';
+        eye.classList.remove('fa-eye');
+        eye.classList.add('fa-eye-slash');
+      } else {
+        field.type = 'password';
+        eye.classList.remove('fa-eye-slash');
+        eye.classList.add('fa-eye');
+      }
+    }
+
+    // --- Quick Demo Login Helper ---
+    function quickFill(email, pwd) {
+      document.getElementById('login-email').value = email;
+      document.getElementById('login-password').value = pwd;
+      document.getElementById('login-form').dispatchEvent(new Event('submit'));
+    }
+
+    // --- Authentication Handlers ---
+    async function handleLogin(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      const errorDiv = document.getElementById('login-error');
+      const errorText = document.getElementById('login-error-text');
+      const btnText = document.getElementById('login-btn-text');
+      const spinner = document.getElementById('login-btn-spinner');
+
+      errorDiv.classList.add('hidden');
+      btnText.textContent = 'Verifying...';
+      spinner.classList.remove('hidden');
+
+      const res = await apiRequest('/auth/login', 'POST', { email, password });
+      btnText.textContent = 'Sign In';
+      spinner.classList.add('hidden');
+
+      if (res && res.token) {
+        authToken = res.token;
+        currentUser = res.user;
+        localStorage.setItem('flint_token', authToken);
+        showToast(`Welcome back, ${currentUser.name}!`, 'success');
+        renderAppShell();
+      } else {
+        errorText.textContent = 'Invalid email or password. Please try again.';
+        errorDiv.classList.remove('hidden');
+      }
+    }
+
+    async function handleLogout() {
+      if (authToken) {
+        await apiRequest('/auth/logout', 'POST');
+      }
+      authToken = '';
+      currentUser = null;
+      localStorage.removeItem('flint_token');
+      document.getElementById('view-app').classList.add('hidden');
+      document.getElementById('view-login').classList.remove('hidden');
+      if (pollInterval) clearInterval(pollInterval);
+    }
+
+    // --- Navigation & View Rendering ---
+    function navigatePage(pageName) {
+      currentPage = pageName;
+      
+      // Update sidebar active states
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        if (btn.dataset.page === pageName) {
+          btn.classList.add('bg-slate-800', 'text-white', 'border-l-2', 'border-emerald-500');
+          btn.classList.remove('text-slate-300');
+        } else {
+          btn.classList.remove('bg-slate-800', 'text-white', 'border-l-2', 'border-emerald-500');
+          btn.classList.add('text-slate-300');
+        }
+      });
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = '<div class="flex items-center justify-center h-64 text-slate-500"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i></div>';
+
+      switch (pageName) {
+        case 'dashboard': renderDashboardView(); break;
+        case 'pipelines': renderPipelinesView(); break;
+        case 'deployments': renderDeploymentsView(); break;
+        case 'infrastructure': renderInfrastructureView(); break;
+        case 'security': renderSecurityView(); break;
+        case 'gitops': renderGitOpsView(); break;
+        case 'runners': renderRunnersView(); break;
+        case 'monitoring': renderMonitoringView(); break;
+        case 'logs': renderLogsView(); break;
+        case 'audit': renderAuditView(); break;
+        case 'reports': renderReportsView(); break;
+        case 'users': renderUsersView(); break;
+        case 'settings': renderSettingsView(); break;
+        default: renderDashboardView();
+      }
+    }
+
+    function renderAppShell() {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-app').classList.remove('hidden');
+
+      document.getElementById('user-email-display').textContent = currentUser.email;
+      document.getElementById('user-role-display').textContent = currentUser.role;
+      document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+
+      // Role based menu adjustments
+      const userBtn = document.getElementById('nav-users-btn');
+      if (currentUser.role !== 'ADMIN') {
+        userBtn.classList.add('opacity-40');
+      } else {
+        userBtn.classList.remove('opacity-40');
+      }
+
+      navigatePage('dashboard');
+    }
+
+    // --- Check Existing Session on Startup ---
+    async function checkExistingSession() {
+      if (!authToken) {
+        document.getElementById('view-login').classList.remove('hidden');
+        return;
+      }
+      const res = await apiRequest('/auth/session', 'GET');
+      if (res && res.authenticated) {
+        currentUser = res.user;
+        renderAppShell();
+      } else {
+        handleLogout();
+      }
+    }
+
+    // =========================================================================
+    // 4. SCREEN COMPONENT RENDERERS
+    // =========================================================================
+
+    // --- 4.1 DASHBOARD VIEW ---
+    async function renderDashboardView() {
+      const data = await apiRequest('/api/dashboard');
+      if (!data) return;
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <!-- Top Overview Stats -->
+          <div>
+            <h2 class="text-xl font-bold text-white tracking-tight">Platform Command Center</h2>
+            <p class="text-xs text-slate-400">Live health, pipeline telemetry, and deployment metrics</p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Platform Health</span>
+              <div class="flex items-center space-x-2 mt-2">
+                <span class="w-2.5 h-2.5 rounded-full ${data.platform_health === 'HEALTHY' ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
+                <span class="text-base font-bold text-white">${data.platform_health}</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Active Pipelines</span>
+              <div class="text-2xl font-bold text-blue-400 mt-1">${data.active_pipelines}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Deployments</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.successful_deployments}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Score</span>
+              <div class="text-2xl font-bold text-purple-400 mt-1">${data.security_score}%</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Running Runners</span>
+              <div class="text-2xl font-bold text-cyan-400 mt-1">${data.running_runners} / 4</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Active Alerts</span>
+              <div class="text-2xl font-bold ${data.active_alerts > 0 ? 'text-rose-400' : 'text-slate-400'} mt-1">${data.active_alerts}</div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard Sections -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left: Active Deployments & Traffic -->
+            <div class="lg:col-span-2 space-y-6">
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Active Progressive Canary Rollout</h3>
+                    <p class="text-xs text-slate-400">Kubernetes multi-cluster traffic distribution</p>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
+                    ${data.latest_deployment ? data.latest_deployment.strategy : 'CANARY'}
+                  </span>
+                </div>
+
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+                      <span>Target Version (${data.latest_deployment ? data.latest_deployment.version : 'v2.4.0'})</span>
+                      <span>${data.current_traffic_weight}% Traffic</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
+                      <div class="bg-emerald-500 transition-all duration-500" style="width: ${data.current_traffic_weight}%"></div>
+                      <div class="bg-blue-600 transition-all duration-500" style="width: ${100 - data.current_traffic_weight}%"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-slate-500 mt-1 font-mono">
+                      <span>Baseline: ${100 - data.current_traffic_weight}%</span>
+                      <span>Canary Target: ${data.current_traffic_weight}%</span>
+                    </div>
+                  </div>
+
+                  <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+                    <div class="text-xs text-slate-400">
+                      Error Rate: <strong class="text-emerald-400">0.01%</strong> | P99 Latency: <strong class="text-slate-200">14.2ms</strong>
+                    </div>
+                    <button onclick="navigatePage('deployments')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 rounded-lg text-xs font-medium transition flex items-center space-x-1.5">
+                      <span>Manage Rollout</span>
+                      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Pipeline Triggers -->
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-sm font-bold text-white">Quick Pipeline Actions</h3>
+                  <button onclick="navigatePage('pipelines')" class="text-xs text-emerald-400 hover:underline">View All Pipelines</button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button onclick="triggerQuickPipeline('pipe-web-prod')" class="p-3 bg-slate-850 hover:bg-slate-800 border border-slate-750 rounded-lg text-left transition flex items-center justify-between group">
+                    <div>
+                      <p class="text-xs font-bold text-white group-hover:text-emerald-400">Run Web API Pipeline</p>
+                      <p class="text-[11px] text-slate-400">7 DAG Stages (Security, Unit, Build, Deploy)</p>
+                    </div>
+                    <i class="fa-solid fa-play text-xs text-emerald-400"></i>
+                  </button>
+
+                  <button onclick="triggerQuickPipeline('pipe-auth-service')" class="p-3 bg-slate-850 hover:bg-slate-800 border border-slate-750 rounded-lg text-left transition flex items-center justify-between group">
+                    <div>
+                      <p class="text-xs font-bold text-white group-hover:text-blue-400">Run Auth Service Pipeline</p>
+                      <p class="text-[11px] text-slate-400">5 DAG Stages (RBAC, Crypto Tests)</p>
+                    </div>
+                    <i class="fa-solid fa-play text-xs text-blue-400"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Status Cards -->
+            <div class="space-y-6">
+              <!-- Security Compliance Card -->
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <h3 class="text-sm font-bold text-white mb-3">Security Posture (OPA Rego)</h3>
+                <div class="space-y-2.5 text-xs">
+                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
+                    <span class="text-slate-300">CIS 2.1.1 S3 Encryption</span>
+                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  </div>
+                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
+                    <span class="text-slate-300">CIS 5.2.6 Non-Root Pods</span>
+                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  </div>
+                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
+                    <span class="text-slate-300">CIS 4.1.2 Port 22 SSH</span>
+                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  </div>
+                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
+                    <span class="text-slate-300">Trivy Container CVEs</span>
+                    <span class="text-emerald-400 font-semibold">0 Critical</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cryptographic Audit Status -->
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                  <h3 class="text-sm font-bold text-white">Audit Trail Integrity</h3>
+                  <i class="fa-solid fa-link text-emerald-400 text-xs"></i>
+                </div>
+                <p class="text-xs text-slate-400 mb-3">All system transactions are cryptographically chained using SHA-256 genesis hashing.</p>
+                <button onclick="verifyAuditTrail()" class="w-full py-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2">
+                  <i class="fa-solid fa-shield-check text-emerald-400"></i>
+                  <span>Verify Hash-Chain Integrity</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Quick Trigger Helper from Dashboard
+    async function triggerQuickPipeline(pipeId) {
+      if (currentUser.role === 'VIEWER') {
+        showToast('VIEWER role cannot trigger pipelines.', 'error');
+        return;
+      }
+      showToast('Executing pipeline DAG workflow...', 'info');
+      const res = await apiRequest(`/api/pipelines/${pipeId}/run`, 'POST', { simulation_mode: 'NORMAL' });
+      if (res) {
+        showToast(`Pipeline '${res.pipeline_name}' completed successfully!`, 'success');
+        navigatePage('pipelines');
+      }
+    }
+
+    // --- 4.2 PIPELINES VIEW (DAG Visualizer & Runs) ---
+    async function renderPipelinesView() {
+      const [pipeData, runsData] = await Promise.all([
+        apiRequest('/api/pipelines'),
+        apiRequest('/api/pipeline-runs')
+      ]);
+      if (!pipeData) return;
+
+      const pipelines = pipeData.pipelines || [];
+      const runs = runsData ? runsData.runs : [];
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Continuous Delivery Pipelines</h2>
+              <p class="text-xs text-slate-400">Topological DAG dependency graph resolution & execution</p>
+            </div>
+            ${currentUser.role !== 'VIEWER' ? `
+              <button onclick="openCreatePipelineModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2 shadow-lg shadow-emerald-900/20">
+                <i class="fa-solid fa-plus"></i>
+                <span>Create Pipeline</span>
+              </button>
+            ` : ''}
+          </div>
+
+          <!-- Pipelines List -->
+          <div class="space-y-4">
+            ${pipelines.map(pipe => `
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <h3 class="text-base font-bold text-white">${pipe.name}</h3>
+                      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400">${pipe.branch}</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-0.5">${pipe.description || pipe.repository}</p>
+                  </div>
+
+                  <div class="flex items-center space-x-2">
+                    ${currentUser.role !== 'VIEWER' ? `
+                      <button onclick="openRunPipelineModal('${pipe.id}', '${pipe.name}')" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-play text-[10px]"></i>
+                        <span>Run Pipeline</span>
+                      </button>
+                    ` : '<span class="text-xs text-slate-500 italic">Read-only mode</span>'}
+                  </div>
+                </div>
+
+                <!-- DAG Stages Pill View -->
+                <div>
+                  <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">DAG Stages Sequence</p>
+                  <div class="flex flex-wrap items-center gap-2">
+                    ${pipe.stages.map((stage, idx) => `
+                      <div class="flex items-center">
+                        <div class="px-3 py-1.5 rounded-lg bg-slate-850 border border-slate-750 text-xs text-slate-200 flex items-center space-x-1.5">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                          <span>${stage.name || stage.id}</span>
+                        </div>
+                        ${idx < pipe.stages.length - 1 ? '<i class="fa-solid fa-arrow-right text-[10px] text-slate-600 mx-2"></i>' : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Execution History Table -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-bold text-white mb-4">Pipeline Execution History</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-850 text-slate-400 uppercase text-[10px]">
+                  <tr>
+                    <th class="p-3">Run ID</th>
+                    <th class="p-3">Pipeline</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Triggered By</th>
+                    <th class="p-3">Duration</th>
+                    <th class="p-3">Completed At</th>
+                    <th class="p-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                  ${runs.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-500">No runs recorded yet</td></tr>' : ''}
+                  ${runs.map(r => `
+                    <tr class="hover:bg-slate-850/50 transition">
+                      <td class="p-3 font-mono text-slate-400">${r.id}</td>
+                      <td class="p-3 font-semibold text-white">${r.pipeline_name}</td>
+                      <td class="p-3">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+                          r.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                          r.status === 'FAILED' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                          'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        }">${r.status}</span>
+                      </td>
+                      <td class="p-3 text-slate-400">${r.triggered_by}</td>
+                      <td class="p-3 font-mono">${r.duration_seconds}s</td>
+                      <td class="p-3 text-slate-500">${new Date(r.completed_at * 1000).toLocaleTimeString()}</td>
+                      <td class="p-3 text-right">
+                        <button onclick="viewPipelineRunLogs('${r.id}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[11px]">
+                          View Logs
+                        </button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Modal: Run Pipeline with Simulation Selection
+    function openRunPipelineModal(pipeId, pipeName) {
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-white">Execute Pipeline: ${pipeName}</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="space-y-3">
+            <label class="block text-xs font-semibold text-slate-300 uppercase">Select Execution Scenario</label>
+            <div class="space-y-2 text-xs">
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-emerald-500/50">
+                <input type="radio" name="sim_mode" value="NORMAL" checked class="mt-0.5 text-emerald-500">
+                <div>
+                  <p class="font-bold text-white">Standard Production Run (Happy Path)</p>
+                  <p class="text-slate-400 text-[11px]">All 7 DAG stages pass and deploy to Kubernetes cluster.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-rose-500/50">
+                <input type="radio" name="sim_mode" value="FAIL_SECURITY" class="mt-0.5 text-rose-500">
+                <div>
+                  <p class="font-bold text-rose-400">Simulate Security Gate Block (CIS Violation)</p>
+                  <p class="text-slate-400 text-[11px]">Fails at Security Scan stage and blocks deployment.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-amber-500/50">
+                <input type="radio" name="sim_mode" value="FAIL_TESTS" class="mt-0.5 text-amber-500">
+                <div>
+                  <p class="font-bold text-amber-400">Simulate Unit/Integration Test Failure</p>
+                  <p class="text-slate-400 text-[11px]">Fails at Unit Test stage with test assertion errors.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 hover:text-white rounded-lg text-xs font-medium">Cancel</button>
+            <button onclick="executePipelineRun('${pipeId}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center space-x-2">
+              <i class="fa-solid fa-play"></i>
+              <span>Launch Run</span>
+            </button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    async function executePipelineRun(pipeId) {
+      const mode = document.querySelector('input[name="sim_mode"]:checked').value;
+      closeModal();
+      showToast('Dispatching DAG pipeline workflow to runner agent...', 'info');
+
+      const res = await apiRequest(`/api/pipelines/${pipeId}/run`, 'POST', { simulation_mode: mode });
+      if (res) {
+        if (res.status === 'COMPLETED') {
+          showToast(`Pipeline ${res.pipeline_name} completed successfully!`, 'success');
+        } else {
+          showToast(`Pipeline ${res.pipeline_name} failed: ${res.failure_reason}`, 'error');
+        }
+        navigatePage('pipelines');
+      }
+    }
+
+    async function viewPipelineRunLogs(runId) {
+      const run = await apiRequest(`/api/pipeline-runs/${runId}`);
+      if (!run) return;
+
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-white">${run.pipeline_name} — Run Logs</h3>
+              <p class="text-xs text-slate-400 font-mono">${run.id} | Commit: ${run.commit_sha}</p>
+            </div>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="flex-1 bg-black/80 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 overflow-y-auto custom-scrollbar whitespace-pre-wrap">
+${run.logs}
+          </div>
+
+          <div class="flex justify-between items-center pt-2">
+            <span class="text-xs text-slate-400">Status: <strong class="${run.status === 'COMPLETED' ? 'text-emerald-400' : 'text-rose-400'}">${run.status}</strong></span>
+            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 hover:text-white rounded-lg text-xs font-medium">Close</button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    // Modal: Create Pipeline
+    function openCreatePipelineModal() {
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-white">Create New CI/CD Pipeline</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <form onsubmit="handleCreatePipeline(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Pipeline Name</label>
+              <input type="text" id="new-pipe-name" required placeholder="e.g. Payment Processor Microservice"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Description</label>
+              <input type="text" id="new-pipe-desc" placeholder="Production deployment pipeline"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Repository URL</label>
+                <input type="text" id="new-pipe-repo" value="https://github.com/Kusuma-Podili/Flint"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Target Branch</label>
+                <input type="text" id="new-pipe-branch" value="main"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg font-medium">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold">Create Pipeline</button>
+            </div>
+          </form>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    async function handleCreatePipeline(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-pipe-name').value;
+      const description = document.getElementById('new-pipe-desc').value;
+      const repository = document.getElementById('new-pipe-repo').value;
+      const branch = document.getElementById('new-pipe-branch').value;
+
+      const stages = [
+        {"id": "checkout", "name": "Source Checkout", "depends_on": []},
+        {"id": "security-scan", "name": "Security & OPA Scan", "depends_on": ["checkout"]},
+        {"id": "unit-tests", "name": "Unit Tests", "depends_on": ["checkout"]},
+        {"id": "container-build", "name": "Build Container", "depends_on": ["security-scan", "unit-tests"]},
+        {"id": "deploy-canary", "name": "Canary Rollout", "depends_on": ["container-build"]}
+      ];
+
+      closeModal();
+      const res = await apiRequest('/api/pipelines', 'POST', { name, description, repository, branch, stages });
+      if (res) {
+        showToast(`Pipeline '${name}' created!`, 'success');
+        navigatePage('pipelines');
+      }
+    }
+
+    // --- 4.3 DEPLOYMENTS VIEW (Canary, Blue-Green & Rollback) ---
+    async function renderDeploymentsView() {
+      const data = await apiRequest('/api/deployments');
+      if (!data) return;
+
+      const deployments = data.deployments || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Deployments & Traffic Controllers</h2>
+              <p class="text-xs text-slate-400">Zero-downtime Canary traffic shifting and Blue-Green management</p>
+            </div>
+          </div>
+
+          <!-- Deployments List -->
+          <div class="space-y-4">
+            ${deployments.map(dep => `
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div class="flex items-center space-x-3">
+                      <h3 class="text-base font-bold text-white">${dep.application}</h3>
+                      <span class="text-xs px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">${dep.version}</span>
+                      <span class="text-xs px-2 py-0.5 rounded font-bold ${
+                        dep.status === 'HEALTHY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                        dep.status === 'ROLLED_BACK' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                        'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                      }">${dep.status}</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">${dep.environment} | Strategy: <strong>${dep.strategy}</strong> | Deployed by: ${dep.deployed_by}</p>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex items-center space-x-2">
+                    ${currentUser.role !== 'VIEWER' ? `
+                      ${dep.strategy === 'CANARY' && dep.status !== 'ROLLED_BACK' ? `
+                        <button onclick="promoteCanary('${dep.id}')" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                          <i class="fa-solid fa-arrow-up-right-dots"></i>
+                          <span>Promote Canary (+25%)</span>
+                        </button>
+                      ` : ''}
+
+                      ${dep.strategy === 'BLUE_GREEN' && dep.status !== 'ROLLED_BACK' ? `
+                        <button onclick="switchBlueGreen('${dep.id}')" class="px-3 py-1.5 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                          <i class="fa-solid fa-repeat"></i>
+                          <span>Switch to ${dep.blue_green_active === 'blue' ? 'GREEN' : 'BLUE'}</span>
+                        </button>
+                      ` : ''}
+
+                      ${dep.status !== 'ROLLED_BACK' ? `
+                        <button onclick="openRollbackModal('${dep.id}')" class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                          <i class="fa-solid fa-clock-rotate-left"></i>
+                          <span>Rollback</span>
+                        </button>
+                      ` : ''}
+                    ` : '<span class="text-xs text-slate-500 italic">Read-only mode</span>'}
+                  </div>
+                </div>
+
+                <!-- Strategy Specific Visualizer -->
+                ${dep.strategy === 'CANARY' ? `
+                  <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg">
+                    <div class="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+                      <span>Canary Traffic Distribution</span>
+                      <span>${dep.canary_weight}% Target / ${100 - dep.canary_weight}% Baseline</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
+                      <div class="bg-emerald-500 transition-all duration-500" style="width: ${dep.canary_weight}%"></div>
+                      <div class="bg-blue-600 transition-all duration-500" style="width: ${100 - dep.canary_weight}%"></div>
+                    </div>
+                  </div>
+                ` : `
+                  <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-4">
+                      <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'blue' ? 'bg-blue-500' : 'bg-slate-700'}"></span>
+                        <span class="${dep.blue_green_active === 'blue' ? 'font-bold text-white' : 'text-slate-500'}">BLUE (Production)</span>
+                      </div>
+                      <i class="fa-solid fa-arrow-right-arrow-left text-slate-600 text-xs"></i>
+                      <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'green' ? 'bg-emerald-500' : 'bg-slate-700'}"></span>
+                        <span class="${dep.blue_green_active === 'green' ? 'font-bold text-white' : 'text-slate-500'}">GREEN (${dep.blue_green_active === 'green' ? 'Active' : 'Standby'})</span>
+                      </div>
+                    </div>
+                    <span class="text-[11px] text-slate-400">Zero-downtime routing active</span>
+                  </div>
+                `}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    async function promoteCanary(depId) {
+      const res = await apiRequest(`/api/deployments/${depId}/promote`, 'POST');
+      if (res) {
+        showToast(`Canary weight increased to ${res.canary_weight}%`, 'success');
+        navigatePage('deployments');
+      }
+    }
+
+    async function switchBlueGreen(depId) {
+      const res = await apiRequest(`/api/deployments/${depId}/switch`, 'POST');
+      if (res) {
+        showToast(`Switched active traffic to ${res.blue_green_active.toUpperCase()} pool`, 'success');
+        navigatePage('deployments');
+      }
+    }
+
+    function openRollbackModal(depId) {
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-rose-400">Trigger Deployment Rollback</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <p class="text-slate-300">Are you sure you want to rollback deployment <strong class="text-white font-mono">${depId}</strong>? This will immediately restore 100% traffic to the prior stable release.</p>
+            
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Rollback Reason</label>
+              <input type="text" id="rollback-reason" value="High error rate threshold breach on telemetry"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-medium">Cancel</button>
+            <button onclick="executeRollback('${depId}')" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition flex items-center space-x-2">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <span>Confirm Rollback</span>
+            </button>
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    async function executeRollback(depId) {
+      const reason = document.getElementById('rollback-reason').value;
+      closeModal();
+      const res = await apiRequest(`/api/deployments/${depId}/rollback`, 'POST', { reason });
+      if (res) {
+        showToast('Rollback completed. Restored previous stable version.', 'warning');
+        navigatePage('deployments');
+      }
+    }
+
+    // --- 4.4 INFRASTRUCTURE & DRIFT VIEW ---
+    async function renderInfrastructureView() {
+      const data = await apiRequest('/api/infrastructure');
+      if (!data) return;
+
+      const resources = data.resources || [];
+      const summary = data.summary || {};
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Multi-Cloud Infrastructure (IaC)</h2>
+              <p class="text-xs text-slate-400">Terraform / OpenTofu state locking, plan analysis, and drift detection</p>
+            </div>
+            ${currentUser.role !== 'VIEWER' ? `
+              <div class="flex items-center space-x-2">
+                <button onclick="runDriftDetection()" class="px-3 py-2 bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <span>Run Drift Detection</span>
+                </button>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Terraform Summary Metrics -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Managed Resources</span>
+              <div class="text-2xl font-bold text-white mt-1">${summary.total_resources || 5}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Plan: To Add</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${summary.to_add || 0}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Plan: To Update</span>
+              <div class="text-2xl font-bold text-blue-400 mt-1">${summary.to_update || 0}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Drift Detected</span>
+              <div class="text-2xl font-bold ${summary.drift_count > 0 ? 'text-rose-400' : 'text-slate-400'} mt-1">${summary.drift_count || 0}</div>
+            </div>
+          </div>
+
+          <!-- Resources Table -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-bold text-white mb-4">Provisioned Cloud Resources</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-850 text-slate-400 uppercase text-[10px]">
+                  <tr>
+                    <th class="p-3">Resource Identifier</th>
+                    <th class="p-3">Type</th>
+                    <th class="p-3">Provider</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Drift State</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+                  ${resources.map(res => `
+                    <tr class="hover:bg-slate-850/50 transition">
+                      <td class="p-3 font-semibold text-white">${res.resource_name}</td>
+                      <td class="p-3 text-slate-400">${res.resource_type}</td>
+                      <td class="p-3 text-slate-400">${res.provider}</td>
+                      <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${res.status}</span></td>
+                      <td class="p-3">
+                        <span class="px-2 py-0.5 rounded font-bold ${
+                          res.drift_detected ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-slate-800 text-slate-400'
+                        }">
+                          ${res.drift_detected ? 'DRIFT DETECTED' : 'IN SYNC'}
+                        </span>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function runDriftDetection() {
+      showToast('Analyzing cloud state against Terraform specification...', 'info');
+      const res = await apiRequest('/api/infrastructure/drift', 'POST');
+      if (res) {
+        if (res.has_drift) {
+          showToast('Infrastructure drift detected on Kubernetes Pod replicas!', 'warning');
+          openDriftModal(res.details);
+        } else {
+          showToast('No infrastructure drift detected. All resources in sync.', 'success');
+        }
+        navigatePage('infrastructure');
+      }
+    }
+
+    function openDriftModal(details) {
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Infrastructure Drift Detected</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <p class="text-slate-300">${details.message}</p>
+            <div class="p-3 bg-black/60 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1">
+              <p class="text-slate-400">Resource: <strong class="text-white">${details.resource}</strong></p>
+              <p class="text-emerald-400">Desired: ${JSON.stringify(details.desired)}</p>
+              <p class="text-rose-400">Actual:  ${JSON.stringify(details.actual)}</p>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-medium">Dismiss</button>
+            ${currentUser.role !== 'VIEWER' && currentUser.role !== 'DEVELOPER' ? `
+              <button onclick="remediateDrift()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition">
+                Reconcile & Remediate Drift
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    async function remediateDrift() {
+      closeModal();
+      const res = await apiRequest('/api/infrastructure/remediate', 'POST');
+      if (res) {
+        showToast('Infrastructure successfully reconciled back to desired state.', 'success');
+        navigatePage('infrastructure');
+      }
+    }
+
+    // --- 4.5 SECURITY & OPA VIEW ---
+    async function renderSecurityView() {
+      const data = await apiRequest('/api/security');
+      if (!data) return;
+
+      const findings = data.findings || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Security, OPA Rego & Vulnerability Gate</h2>
+              <p class="text-xs text-slate-400">Continuous DevSecOps governance and CIS benchmark policies</p>
+            </div>
+            ${currentUser.role !== 'VIEWER' ? `
+              <button onclick="triggerSecurityScan()" class="px-3 py-2 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-shield-virus"></i>
+                <span>Run Full Security Scan</span>
+              </button>
+            ` : ''}
+          </div>
+
+          <!-- Security Score Overview -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Score</span>
+              <div class="text-2xl font-bold text-purple-400 mt-1">${data.security_score}% (Grade A+)</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Critical CVEs</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.critical_count}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">High CVEs</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.high_count}</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Policy Violations</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.policy_violations}</div>
+            </div>
+          </div>
+
+          <!-- Compliance Findings Table -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-bold text-white mb-4">OPA Rego & Trivy Security Checks</h3>
+            <div class="space-y-3">
+              ${findings.map(f => `
+                <div class="p-3.5 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between">
+                  <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                      <span class="text-xs font-bold text-white">${f.rule}</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">${f.type}</span>
+                    </div>
+                    <p class="text-xs text-slate-400">${f.description}</p>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <i class="fa-solid fa-check mr-1"></i>${f.status}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function triggerSecurityScan() {
+      showToast('Executing DevSecOps scan across repository and container artifacts...', 'info');
+      const res = await apiRequest('/api/security/scan', 'POST');
+      if (res) {
+        showToast('Security scan completed. Posture Score: 98%', 'success');
+        navigatePage('security');
+      }
+    }
+
+    // --- 4.6 GITOPS VIEW ---
+    async function renderGitOpsView() {
+      const data = await apiRequest('/api/gitops');
+      if (!data) return;
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">GitOps Continuous Reconciliation</h2>
+              <p class="text-xs text-slate-400">Declarative desired state synchronization with Git repository</p>
+            </div>
+            ${currentUser.role !== 'VIEWER' ? `
+              <button onclick="reconcileGitOps()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Reconcile Now</span>
+              </button>
+            ` : ''}
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-4 bg-slate-850 border border-slate-800 rounded-lg space-y-2">
+                <span class="text-[10px] font-semibold text-slate-500 uppercase">Git Source Repository</span>
+                <p class="text-xs font-mono text-white">${data.repo_url || 'https://github.com/Kusuma-Podili/Flint.git'}</p>
+                <p class="text-xs text-slate-400">Branch: <strong class="text-slate-200">${data.target_branch || 'main'}</strong></p>
+              </div>
+
+              <div class="p-4 bg-slate-850 border border-slate-800 rounded-lg space-y-2">
+                <span class="text-[10px] font-semibold text-slate-500 uppercase">Sync Status</span>
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span class="text-sm font-bold text-emerald-400">${data.sync_status || 'IN_SYNC'}</span>
+                </div>
+                <p class="text-xs text-slate-400 font-mono">Commit SHA: ${data.synced_commit || '589532f'}</p>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800">
+              <h4 class="text-xs font-bold text-white mb-2">Cluster Declarative Manifest State</h4>
+              <pre class="bg-black/60 p-3 rounded-lg border border-slate-800 font-mono text-xs text-slate-300">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flint-control-plane
+  labels:
+    app.kubernetes.io/managed-by: gitops-reconciler
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0</pre>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function reconcileGitOps() {
+      showToast('Reconciling cluster state with remote Git repository...', 'info');
+      const res = await apiRequest('/api/gitops/reconcile', 'POST');
+      if (res) {
+        showToast('GitOps state synchronized with commit 589532f!', 'success');
+        navigatePage('gitops');
+      }
+    }
+
+    // --- 4.7 RUNNERS VIEW ---
+    async function renderRunnersView() {
+      const data = await apiRequest('/api/runners');
+      if (!data) return;
+
+      const runners = data.runners || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Worker Runner Daemons</h2>
+              <p class="text-xs text-slate-400">Isolated agent processes executing DAG tasks in container sandboxes</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${runners.map(r => `
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full ${r.status === 'IDLE' ? 'bg-emerald-500' : r.status === 'BUSY' ? 'bg-blue-500' : 'bg-slate-600'}"></span>
+                    <h3 class="text-sm font-bold text-white font-mono">${r.name}</h3>
+                  </div>
+                  <span class="text-xs px-2 py-0.5 rounded font-bold ${
+                    r.status === 'IDLE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                    r.status === 'BUSY' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                    'bg-slate-800 text-slate-400'
+                  }">${r.status}</span>
+                </div>
+
+                <div class="space-y-1.5 text-xs text-slate-400">
+                  <div class="flex justify-between">
+                    <span>CPU Utilization:</span>
+                    <span class="text-slate-200 font-mono">${r.cpu_percent}%</span>
+                  </div>
+                  <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full" style="width: ${r.cpu_percent * 2}%"></div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-1.5 pt-2">
+                  ${r.tags.map(t => `<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-850 border border-slate-750 text-slate-400">${t}</span>`).join('')}
+                </div>
+
+                ${currentUser.role !== 'VIEWER' ? `
+                  <div class="pt-3 border-t border-slate-800 flex justify-end space-x-2">
+                    <button onclick="drainRunner('${r.id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-750 text-slate-300 rounded text-xs">
+                      Drain
+                    </button>
+                    <button onclick="toggleRunner('${r.id}')" class="px-2.5 py-1 ${r.enabled ? 'bg-rose-600/20 text-rose-300 hover:bg-rose-600/30' : 'bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30'} rounded text-xs font-semibold">
+                      ${r.enabled ? 'Disable' : 'Enable'}
+                    </button>
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    async function toggleRunner(rId) {
+      const res = await apiRequest(`/api/runners/${rId}/toggle`, 'POST');
+      if (res) {
+        showToast('Runner status updated.', 'info');
+        navigatePage('runners');
+      }
+    }
+
+    async function drainRunner(rId) {
+      const res = await apiRequest(`/api/runners/${rId}/drain`, 'POST');
+      if (res) {
+        showToast('Runner set to DRAINING state.', 'warning');
+        navigatePage('runners');
+      }
+    }
+
+    // --- 4.8 MONITORING VIEW ---
+    async function renderMonitoringView() {
+      const data = await apiRequest('/api/monitoring');
+      if (!data) return;
+
+      const metrics = data.metrics || {};
+      const alerts = data.alerts || [];
+
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div>
+            <h2 class="text-xl font-bold text-white tracking-tight">Platform Telemetry & Live Metrics</h2>
+            <p class="text-xs text-slate-400">Prometheus metrics exporter and active threshold incident alerts</p>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Throughput</span>
+              <div class="text-2xl font-bold text-white mt-1">${metrics.requests_per_second} req/s</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">P99 Latency</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${metrics.latency_p99_ms} ms</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Error Rate</span>
+              <div class="text-2xl font-bold text-emerald-400 mt-1">${metrics.error_rate_percent}%</div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Cluster CPU</span>
+              <div class="text-2xl font-bold text-blue-400 mt-1">${metrics.cpu_utilization_percent}%</div>
+            </div>
+          </div>
+
+          <!-- Active Alerts -->
+          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+            <h3 class="text-sm font-bold text-white mb-4">Active System Incidents & Alerts</h3>
+            <div class="space-y-3">
+              ${alerts.length === 0 ? '<p class="text-xs text-slate-500 italic p-3">No active alerts. All system health thresholds normal.</p>' : ''}
+              ${alerts.map(a => `
+                <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between">
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <span class="text-xs font-bold text-rose-400">${a.rule_name}</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">${a.severity}</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-0.5">${a.message}</p>
+                  </div>
+                  ${currentUser.role !== 'VIEWER' ? `
+                    <button onclick="resolveAlert('${a.id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs">
+                      Resolve
+                    </button>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function resolveAlert(alertId) {
+      const res = await apiRequest(`/api/alerts/${alertId}/resolve`, 'POST');
+      if (res) {
+        showToast('Alert resolved.', 'success');
+        navigatePage('monitoring');
+      }
+    }
+
+    // --- 4.9 LOGS VIEW ---
+    async function renderLogsView(levelFilter = 'ALL') {
+      const data = await apiRequest(`/api/logs?level=${levelFilter}`);
+      if (!data) return;
+
+      const logs = data.logs || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Centralized Execution Logs</h2>
+              <p class="text-xs text-slate-400">Structured audit events from pipelines, deployments, and security scanners</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex items-center space-x-2">
+              ${['ALL', 'INFO', 'WARNING', 'ERROR'].map(lvl => `
+                <button onclick="renderLogsView('${lvl}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  levelFilter === lvl ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+                }">${lvl}</button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-xs font-mono">
+              <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+                <tr>
+                  <th class="p-3">Timestamp</th>
+                  <th class="p-3">Level</th>
+                  <th class="p-3">Source</th>
+                  <th class="p-3">Actor</th>
+                  <th class="p-3">Message</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-300">
+                ${logs.map(l => `
+                  <tr class="hover:bg-slate-850/50">
+                    <td class="p-3 text-slate-500 whitespace-nowrap">${new Date(l.timestamp * 1000).toLocaleTimeString()}</td>
+                    <td class="p-3">
+                      <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                        l.level === 'INFO' ? 'text-blue-400' :
+                        l.level === 'WARNING' ? 'text-amber-400' :
+                        l.level === 'ERROR' ? 'text-rose-400' : 'text-emerald-400'
+                      }">${l.level}</span>
+                    </td>
+                    <td class="p-3 text-slate-400">${l.source}</td>
+                    <td class="p-3 text-slate-400">${l.user_email}</td>
+                    <td class="p-3 text-slate-200">${l.message}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- 4.10 AUDIT TRAIL VIEW (SHA-256 Hash Chaining) ---
+    async function renderAuditView() {
+      const data = await apiRequest('/api/audit');
+      if (!data) return;
+
+      const chain = data.audit_chain || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Cryptographic Hash-Chained Audit Log</h2>
+              <p class="text-xs text-slate-400">SOC2 / ISO 27001 compliant SHA-256 tamper-evident transaction ledger</p>
+            </div>
+            <button onclick="verifyAuditTrail()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Verify Chain Integrity</span>
             </button>
           </div>
 
-          <!-- Step Progression Canvas -->
-          <div class="bg-[#090D16] p-5 rounded-xl border border-gray-800/80 flex flex-wrap items-center justify-between gap-3">
-            
-            <div class="p-3.5 bg-gray-900 border border-gray-700/60 rounded-xl text-center shadow-lg w-32">
-              <div class="text-[10px] text-gray-400 font-bold uppercase">1. Checkout</div>
-              <div class="font-bold text-xs text-white mt-1">Source Code</div>
-              <div class="text-[10px] text-emerald-400 font-semibold mt-1 flex items-center justify-center"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-1"></span>Ready</div>
-            </div>
-
-            <span class="text-gray-600 font-bold">➔</span>
-
-            <div class="space-y-2">
-              <div class="p-2.5 bg-gray-900 border border-gray-700/60 rounded-xl text-center shadow-lg w-36">
-                <div class="text-[10px] text-gray-400 font-bold uppercase">2. Security Scan</div>
-                <div class="font-bold text-xs text-white mt-0.5">Trivy & Rego</div>
-                <div class="text-[10px] text-emerald-400 font-semibold mt-0.5 flex items-center justify-center"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-1"></span>Passed</div>
-              </div>
-              <div class="p-2.5 bg-gray-900 border border-gray-700/60 rounded-xl text-center shadow-lg w-36">
-                <div class="text-[10px] text-gray-400 font-bold uppercase">2. Test Suite</div>
-                <div class="font-bold text-xs text-white mt-0.5">Unit & E2E</div>
-                <div class="text-[10px] text-emerald-400 font-semibold mt-0.5 flex items-center justify-center"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-1"></span>Verified</div>
-              </div>
-            </div>
-
-            <span class="text-gray-600 font-bold">➔</span>
-
-            <div class="p-3.5 bg-gray-900 border border-gray-700/60 rounded-xl text-center shadow-lg w-36">
-              <div class="text-[10px] text-gray-400 font-bold uppercase">3. Containerize</div>
-              <div class="font-bold text-xs text-white mt-1">Docker Image</div>
-              <div class="text-[10px] text-emerald-400 font-semibold mt-1 flex items-center justify-center"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400 mr-1"></span>Registry Sync</div>
-            </div>
-
-            <span class="text-gray-600 font-bold">➔</span>
-
-            <div class="p-3.5 bg-gray-900 border border-blue-500/50 rounded-xl text-center shadow-lg w-36 bg-blue-950/20">
-              <div class="text-[10px] text-blue-400 font-bold uppercase">4. Release</div>
-              <div class="font-bold text-xs text-blue-300 mt-1">Kubernetes</div>
-              <div class="text-[10px] text-blue-400 font-semibold mt-1 flex items-center justify-center" id="status-k8s-chip"><span class="h-1.5 w-1.5 rounded-full bg-blue-400 mr-1 animate-ping"></span>Live 50%</div>
+          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs font-mono">
+                <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+                  <tr>
+                    <th class="p-3">Seq #</th>
+                    <th class="p-3">Timestamp</th>
+                    <th class="p-3">User</th>
+                    <th class="p-3">Action</th>
+                    <th class="p-3">Resource</th>
+                    <th class="p-3">Current Hash (SHA-256)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 text-[11px]">
+                  ${chain.map(entry => `
+                    <tr class="hover:bg-slate-850/50 transition">
+                      <td class="p-3 font-bold text-emerald-400">#${entry.sequence_number}</td>
+                      <td class="p-3 text-slate-500">${new Date(entry.timestamp * 1000).toLocaleTimeString()}</td>
+                      <td class="p-3 text-slate-300">${entry.user_email}</td>
+                      <td class="p-3 font-bold text-white">${entry.action}</td>
+                      <td class="p-3 text-slate-400">${entry.resource_type}:${entry.resource_id}</td>
+                      <td class="p-3 text-slate-500 truncate max-w-[200px]" title="${entry.current_hash}">${entry.current_hash}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
-
-        <!-- Real-Time Log Console -->
-        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-3">
-          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-            <div class="flex items-center space-x-2">
-              <div class="h-3 w-3 rounded-full bg-red-500/80"></div>
-              <div class="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-              <div class="h-3 w-3 rounded-full bg-green-500/80"></div>
-              <span class="text-xs font-mono text-gray-400 ml-2">Deployment Worker Terminal (Live Stream)</span>
-            </div>
-            <span class="text-xs text-emerald-400 font-mono flex items-center"><span class="h-2 w-2 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>ACTIVE</span>
-          </div>
-          
-          <div id="terminal-box" class="bg-[#090D16] font-mono text-xs text-gray-300 p-4 rounded-xl h-64 overflow-y-auto custom-scroll space-y-1.5 border border-gray-800/80">
-            <div class="text-gray-500">[SYSTEM] Flint Cloud Orchestrator connected to Kubernetes cluster us-east-1</div>
-            <div class="text-blue-400">[PIPELINE] Checkout branch: main | Commit: 245f517</div>
-            <div class="text-emerald-400">[SECURITY] OPA policy evaluation passed: 0 vulnerabilities found</div>
-            <div class="text-emerald-400">[TEST] Automated unit & integration tests completed with 0 errors</div>
-            <div class="text-purple-400">[BUILD] Container image built and tagged: registry.flint.internal/web-app:v2.4.0</div>
-            <div class="text-blue-400">[CANARY] Traffic weight set to 50% on Production pods (Latency: 14ms | Error Rate: 0.00%)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column: Interactive Traffic Control & Health -->
-      <div class="space-y-6">
-        
-        <!-- Live Traffic Splitting -->
-        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-sm font-bold text-white">Canary Release Control</h3>
-            <span id="canary-weight-label" class="text-xs font-mono bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded font-bold">50% Traffic</span>
-          </div>
-          
-          <p class="text-xs text-gray-400">Safely shift user traffic to the new version in real time without downtime:</p>
-          
-          <div class="space-y-2">
-            <div class="flex justify-between text-xs text-gray-400">
-              <span>Stable (v1.0)</span>
-              <span>Canary (v1.1)</span>
-            </div>
-            <input type="range" min="0" max="100" step="25" value="50" oninput="changeTraffic(this.value)" class="w-full accent-blue-500 cursor-pointer">
-          </div>
-
-          <div class="bg-[#090D16] p-3.5 rounded-xl border border-gray-800 text-xs space-y-2">
-            <div class="flex justify-between"><span class="text-gray-400">Cluster Status:</span><span class="text-emerald-400 font-bold">6/6 Pods Healthy</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">HTTP Success Rate:</span><span class="text-emerald-400 font-bold">99.98%</span></div>
-            <div class="flex justify-between"><span class="text-gray-400">Auto-Rollback Guard:</span><span class="text-blue-400 font-bold">Enabled</span></div>
-          </div>
-        </div>
-
-        <!-- Infrastructure Status -->
-        <div class="bg-[#111827] rounded-2xl border border-gray-800 p-5 shadow-xl space-y-3">
-          <h3 class="text-sm font-bold text-white">Connected Cloud Resources</h3>
-          <div class="space-y-2 text-xs">
-            <div class="p-2.5 bg-[#090D16] rounded-xl border border-gray-800 flex items-center justify-between">
-              <div>
-                <div class="font-bold text-white">AWS EKS Cluster</div>
-                <div class="text-[11px] text-gray-400">us-east-1 · Production</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">Active</span>
-            </div>
-            
-            <div class="p-2.5 bg-[#090D16] rounded-xl border border-gray-800 flex items-center justify-between">
-              <div>
-                <div class="font-bold text-white">Aurora PostgreSQL</div>
-                <div class="text-[11px] text-gray-400">Multi-AZ · Encrypted</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">Synced</span>
-            </div>
-
-            <div class="p-2.5 bg-[#090D16] rounded-xl border border-gray-800 flex items-center justify-between">
-              <div>
-                <div class="font-bold text-white">ElastiCache Redis</div>
-                <div class="text-[11px] text-gray-400">Job Queue Broker</div>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">Active</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <script>
-    lucide.createIcons();
-
-    function changeTraffic(val) {
-      document.getElementById('canary-weight-label').innerText = val + '% Traffic';
-      document.getElementById('status-k8s-chip').innerHTML = '<span class="h-1.5 w-1.5 rounded-full bg-blue-400 mr-1"></span>Live ' + val + '%';
-      appendLog('[TRAFFIC] Shifted live user traffic to ' + val + '% on Canary release (Zero errors detected)', 'text-emerald-400');
+      `;
     }
 
-    function triggerDeployment() {
-      const btn = document.getElementById('btn-deploy');
-      btn.innerText = 'Deploying Application...';
-      btn.disabled = true;
-      appendLog('[DEPLOY] User initiated production deployment workflow', 'text-yellow-400');
-
-      fetch('/api/v1/pipelines/trigger')
-        .then(r => r.json())
-        .then(data => {
-          appendLog('[RUNNER] Execution job ' + data.run_id + ' dispatched across runner nodes', 'text-blue-400');
-          appendLog('[BUILD] Automated tests and security checks passed 100%', 'text-emerald-400');
-          appendLog('[K8S] Pod containers updated without downtime', 'text-emerald-400');
-          setTimeout(() => {
-            btn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5 mr-1.5"></i> Deploy Application';
-            btn.disabled = false;
-            lucide.createIcons();
-          }, 1500);
-        });
+    async function verifyAuditTrail() {
+      showToast('Recalculating SHA-256 cryptographic chain...', 'info');
+      const res = await apiRequest('/api/audit/verify', 'POST');
+      if (res) {
+        if (res.is_valid) {
+          showToast(`Audit Ledger 100% Intact (${res.total_records} chained records verified tamper-free)`, 'success');
+        } else {
+          showToast(`Audit integrity compromise detected! ${res.message}`, 'error');
+        }
+      }
     }
 
-    function appendLog(msg, colorClass) {
-      const t = document.getElementById('terminal-box');
-      const div = document.createElement('div');
-      div.className = colorClass || 'text-gray-300';
-      const timeStr = new Date().toLocaleTimeString();
-      div.innerText = '[' + timeStr + '] ' + msg;
-      t.appendChild(div);
-      t.scrollTop = t.scrollHeight;
+    // --- 4.11 REPORTS VIEW ---
+    async function renderReportsView() {
+      const data = await apiRequest('/api/reports');
+      if (!data) return;
+
+      const sc = data.executive_scorecard || {};
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">Executive DevOps & Compliance Scorecard</h2>
+              <p class="text-xs text-slate-400">Key DORA metrics, SOC2 compliance posture, and SLA availability</p>
+            </div>
+            <button onclick="exportReportJSON()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
+              <i class="fa-solid fa-download"></i>
+              <span>Export Report (JSON)</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Compliance Grade</span>
+              <div class="text-2xl font-bold text-emerald-400">${sc.security_compliance_grade}</div>
+              <p class="text-xs text-slate-400">Zero Critical/High CVEs & CIS Benchmark adherence</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Deployment Frequency</span>
+              <div class="text-2xl font-bold text-blue-400">${sc.deployment_frequency}</div>
+              <p class="text-xs text-slate-400">Elite DORA performance tier</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+              <span class="text-slate-500 text-[11px] font-semibold uppercase">Change Failure Rate</span>
+              <div class="text-2xl font-bold text-purple-400">${sc.change_failure_rate}</div>
+              <p class="text-xs text-slate-400">Mean time to recovery: ${sc.mean_time_to_recovery}</p>
+            </div>
+          </div>
+        </div>
+      `;
     }
+
+    function exportReportJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
+        platform: "Flint",
+        timestamp: new Date().toISOString(),
+        scorecard: { security_grade: "A+", dora_tier: "Elite" }
+      }, null, 2));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", "flint_executive_report.json");
+      dlAnchorElem.click();
+      showToast('Executive report exported to JSON.', 'success');
+    }
+
+    // --- 4.12 USERS VIEW (ADMIN ONLY) ---
+    async function renderUsersView() {
+      if (currentUser.role !== 'ADMIN') {
+        document.getElementById('content-area').innerHTML = `
+          <div class="p-8 text-center bg-slate-900 border border-slate-800 rounded-2xl max-w-md mx-auto space-y-3">
+            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto text-xl">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-base font-bold text-white">Access Restricted</h3>
+            <p class="text-xs text-slate-400">User management is strictly restricted to the <strong>ADMIN</strong> role. Your current role is <strong>${currentUser.role}</strong>.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const data = await apiRequest('/api/users');
+      if (!data) return;
+
+      const users = data.users || [];
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-white tracking-tight">User Administration & RBAC</h2>
+              <p class="text-xs text-slate-400">Manage enterprise user accounts, role bindings, and credentials</p>
+            </div>
+            <button onclick="openCreateUserModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Create New User</span>
+            </button>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+                <tr>
+                  <th class="p-3">User</th>
+                  <th class="p-3">Role</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3">Last Login</th>
+                  <th class="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800">
+                ${users.map(u => `
+                  <tr class="hover:bg-slate-850/50">
+                    <td class="p-3">
+                      <div class="font-bold text-white">${u.name}</div>
+                      <div class="text-[11px] text-slate-400 font-mono">${u.email}</div>
+                    </td>
+                    <td class="p-3">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+                        u.role === 'ADMIN' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
+                        u.role === 'DEVOPS_ENGINEER' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                        u.role === 'DEVELOPER' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                        'bg-slate-800 text-slate-400'
+                      }">${u.role}</span>
+                    </td>
+                    <td class="p-3">
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.status === 'ACTIVE' ? 'text-emerald-400' : 'text-rose-400'}">${u.status}</span>
+                    </td>
+                    <td class="p-3 text-slate-400">${u.last_login ? new Date(u.last_login * 1000).toLocaleTimeString() : 'Never'}</td>
+                    <td class="p-3 text-right space-x-2">
+                      <button onclick="toggleUserStatus('${u.id}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]">
+                        ${u.status === 'ACTIVE' ? 'Disable' : 'Enable'}
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function openCreateUserModal() {
+      const modal = document.getElementById('modal-container');
+      modal.innerHTML = `
+        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-white">Create Enterprise User</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+
+          <form onsubmit="handleCreateUser(event)" class="space-y-3 text-xs">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Full Name</label>
+              <input type="text" id="new-user-name" required placeholder="Elena Rostova"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Email Address</label>
+              <input type="email" id="new-user-email" required placeholder="elena@enterprise.io"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Initial Password</label>
+              <input type="password" id="new-user-pwd" required placeholder="••••••••••••"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Role Assignment</label>
+              <select id="new-user-role" class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                <option value="DEVELOPER">DEVELOPER</option>
+                <option value="DEVOPS_ENGINEER">DEVOPS_ENGINEER</option>
+                <option value="VIEWER">VIEWER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg font-medium">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold">Create User</button>
+            </div>
+          </form>
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    async function handleCreateUser(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-user-name').value;
+      const email = document.getElementById('new-user-email').value;
+      const password = document.getElementById('new-user-pwd').value;
+      const role = document.getElementById('new-user-role').value;
+
+      closeModal();
+      const res = await apiRequest('/api/users', 'POST', { name, email, password, role });
+      if (res) {
+        showToast(`User ${email} created successfully!`, 'success');
+        navigatePage('users');
+      }
+    }
+
+    async function toggleUserStatus(userId) {
+      const res = await apiRequest(`/api/users/${userId}/toggle`, 'POST');
+      if (res) {
+        showToast('User status updated.', 'info');
+        navigatePage('users');
+      }
+    }
+
+    // --- 4.13 SETTINGS VIEW ---
+    async function renderSettingsView() {
+      const data = await apiRequest('/api/settings');
+      if (!data) return;
+
+      const st = data.settings || {};
+      const container = document.getElementById('content-area');
+      container.innerHTML = `
+        <div class="space-y-6 max-w-3xl">
+          <div>
+            <h2 class="text-xl font-bold text-white tracking-tight">Platform Configuration</h2>
+            <p class="text-xs text-slate-400">Canary rollout thresholds, timeout defaults, and notification webhooks</p>
+          </div>
+
+          <form onsubmit="handleSaveSettings(event)" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Platform Name</label>
+                <input type="text" id="set-platform-name" value="${st.platform_name || 'Flint Enterprise Platform'}"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Target Environment</label>
+                <input type="text" id="set-environment" value="${st.environment || 'Production (US-East)'}"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Canary Step Size (%)</label>
+                <input type="number" id="set-canary-step" value="${st.canary_step_percentage || '25'}"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+
+              <div>
+                <label class="block text-slate-400 font-semibold mb-1">Canary Max Failure Rate</label>
+                <input type="text" id="set-canary-threshold" value="${st.canary_failure_threshold || '0.02'}"
+                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Slack Alert Webhook URL</label>
+              <input type="text" id="set-slack-webhook" value="${st.slack_webhook_url || ''}"
+                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white font-mono">
+            </div>
+
+            ${currentUser.role === 'ADMIN' || currentUser.role === 'DEVOPS_ENGINEER' ? `
+              <div class="pt-4 border-t border-slate-800 flex justify-end">
+                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition">
+                  Save Settings
+                </button>
+              </div>
+            ` : '<p class="text-slate-500 italic text-[11px]">Only ADMIN and DEVOPS_ENGINEER can update settings.</p>'}
+          </form>
+        </div>
+      `;
+    }
+
+    async function handleSaveSettings(e) {
+      e.preventDefault();
+      const settings = {
+        platform_name: document.getElementById('set-platform-name').value,
+        environment: document.getElementById('set-environment').value,
+        canary_step_percentage: document.getElementById('set-canary-step').value,
+        canary_failure_threshold: document.getElementById('set-canary-threshold').value,
+        slack_webhook_url: document.getElementById('set-slack-webhook').value
+      };
+
+      const res = await apiRequest('/api/settings', 'POST', settings);
+      if (res) {
+        showToast('Settings saved successfully.', 'success');
+      }
+    }
+
+    // Modal Closer
+    function closeModal() {
+      document.getElementById('modal-container').classList.add('hidden');
+    }
+
+    // Initialize application on load
+    window.addEventListener('DOMContentLoaded', () => {
+      checkExistingSession();
+    });
   </script>
 </body>
 </html>
