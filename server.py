@@ -75,10 +75,13 @@ class FlintApiHandler(http.server.SimpleHTTPRequestHandler):
 
         # 1. Frontend SPA
         if path in ["/", "/index.html", "/dashboard", "/login", "/pipelines", "/deployments", "/infrastructure", "/security", "/gitops", "/runners", "/monitoring", "/logs", "/audit", "/reports", "/users", "/settings"]:
+            html_path = os.path.join(os.path.dirname(__file__), "index.html")
+            with open(html_path, "r", encoding="utf-8") as f:
+                content = f.read()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
-            self.wfile.write(HTML_CONTENT.encode("utf-8"))
+            self.wfile.write(content.encode("utf-8"))
             return
 
         # 2. Public Health Check

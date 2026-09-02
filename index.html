@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,17 +12,17 @@
       theme: {
         extend: {
           colors: {
-            brand: {
-              50: '#f0fdf4',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
-              900: '#064e3b',
+            cream: {
+              50: '#fdfbf7',
+              100: '#faf7f2',
+              200: '#f5f0e6',
+              300: '#ebe3d3',
+              400: '#ded3be',
             },
-            slate: {
-              850: '#151e2e',
-              900: '#0f172a',
-              950: '#090d16',
+            brand: {
+              500: '#059669',
+              600: '#047857',
+              700: '#065f46',
             }
           }
         }
@@ -31,121 +31,114 @@
   </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-    body { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', sans-serif; background-color: #faf9f6; }
     code, pre { font-family: 'JetBrains Mono', monospace; }
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #faf7f2; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #d6d0c4; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #b8b1a2; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen antialiased flex flex-col custom-scrollbar">
+<body class="bg-[#faf9f6] text-slate-850 min-h-screen antialiased flex flex-col custom-scrollbar">
 
   <!-- Toast Container -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
   <!-- Global Modal Container -->
-  <div id="modal-container" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"></div>
+  <div id="modal-container" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"></div>
 
   <!-- ========================================================================= -->
-  <!-- 1. SIGN IN VIEW (Shown when unauthenticated) -->
+  <!-- 1. SIGN IN VIEW (Clean White & Cream Theme) -->
   <!-- ========================================================================= -->
-  <div id="view-login" class="flex-1 flex items-center justify-center p-4 min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
-      <!-- Glow Effect -->
-      <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
+  <div id="view-login" class="flex-1 flex items-center justify-center p-4 min-h-screen bg-[#faf9f6]">
+    <div class="w-full max-w-md bg-white border border-[#e8e3d8] rounded-2xl shadow-xl shadow-stone-200/50 p-8 relative">
+      
       <!-- Header -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-4 shadow-inner">
-          <i class="fa-solid fa-cube text-2xl"></i>
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 mb-3 shadow-sm font-bold text-xl">
+          F
         </div>
-        <h1 class="text-2xl font-bold text-white tracking-tight">Sign in to Flint</h1>
-        <p class="text-slate-400 text-sm mt-1">Enterprise Cloud Automation & Delivery Platform</p>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Sign in to Flint</h1>
+        <p class="text-slate-500 text-xs mt-1">Enterprise Cloud Automation & Delivery Platform</p>
       </div>
 
       <!-- Sign In Form -->
       <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Email Address</label>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Email Address</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
               <i class="fa-regular fa-envelope"></i>
             </span>
             <input type="email" id="login-email" required placeholder="admin@gmail.com"
-              class="w-full pl-10 pr-4 py-2.5 bg-slate-850 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+              class="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
+          <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
           <div class="relative">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
               <i class="fa-solid fa-lock"></i>
             </span>
             <input type="password" id="login-password" required placeholder="••••••••••••"
-              class="w-full pl-10 pr-10 py-2.5 bg-slate-850 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
-            <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white">
+              class="w-full pl-10 pr-10 py-2.5 bg-white border border-stone-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition">
+            <button type="button" onclick="togglePasswordVisibility('login-password')" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700">
               <i class="fa-regular fa-eye" id="login-password-eye"></i>
             </button>
           </div>
         </div>
 
         <div class="flex items-center justify-between text-xs">
-          <label class="flex items-center space-x-2 text-slate-400 cursor-pointer">
-            <input type="checkbox" id="login-remember" class="rounded bg-slate-800 border-slate-700 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-slate-900">
+          <label class="flex items-center space-x-2 text-slate-600 cursor-pointer">
+            <input type="checkbox" id="login-remember" class="rounded bg-white border-stone-300 text-emerald-600 focus:ring-emerald-500">
             <span>Remember me</span>
           </label>
-          <span class="text-slate-500">Local Enterprise Auth</span>
+          <span class="text-slate-400">Local Enterprise Auth</span>
         </div>
 
         <!-- Error Banner -->
-        <div id="login-error" class="hidden p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center space-x-2">
+        <div id="login-error" class="hidden p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center space-x-2">
           <i class="fa-solid fa-triangle-exclamation flex-shrink-0"></i>
           <span id="login-error-text">Invalid credentials</span>
         </div>
 
-        <button type="submit" id="login-btn" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-sm transition flex items-center justify-center space-x-2 shadow-lg shadow-emerald-900/20">
+        <button type="submit" id="login-btn" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg text-sm transition flex items-center justify-center space-x-2 shadow-sm">
           <span id="login-btn-text">Sign In</span>
           <i id="login-btn-spinner" class="fa-solid fa-circle-notch fa-spin hidden"></i>
         </button>
       </form>
 
       <!-- Quick Demo Account Selector -->
-      <div class="mt-8 pt-6 border-t border-slate-800">
-        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider text-center mb-3">Quick Login (Demo Accounts)</p>
+      <div class="mt-8 pt-6 border-t border-stone-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">Quick Login (Demo Accounts)</p>
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="quickFill('admin@gmail.com', 'Admin@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-bold text-purple-400 group-hover:text-purple-300">ADMIN</span>
-              <i class="fa-solid fa-crown text-[10px] text-purple-400"></i>
+          <button type="button" onclick="quickFill('admin@gmail.com', 'Admin@123')" class="p-2.5 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-xs font-bold text-purple-700">ADMIN</span>
             </div>
-            <p class="text-[11px] text-slate-400 truncate">admin@gmail.com</p>
+            <p class="text-[11px] text-slate-500 truncate">admin@gmail.com</p>
           </button>
 
-          <button type="button" onclick="quickFill('devops@gmail.com', 'DevOps@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-bold text-blue-400 group-hover:text-blue-300">DEVOPS</span>
-              <i class="fa-solid fa-gears text-[10px] text-blue-400"></i>
+          <button type="button" onclick="quickFill('devops@gmail.com', 'DevOps@123')" class="p-2.5 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-xs font-bold text-blue-700">DEVOPS</span>
             </div>
-            <p class="text-[11px] text-slate-400 truncate">devops@gmail.com</p>
+            <p class="text-[11px] text-slate-500 truncate">devops@gmail.com</p>
           </button>
 
-          <button type="button" onclick="quickFill('developer@gmail.com', 'Developer@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-bold text-emerald-400 group-hover:text-emerald-300">DEVELOPER</span>
-              <i class="fa-solid fa-code text-[10px] text-emerald-400"></i>
+          <button type="button" onclick="quickFill('developer@gmail.com', 'Developer@123')" class="p-2.5 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-xs font-bold text-emerald-700">DEVELOPER</span>
             </div>
-            <p class="text-[11px] text-slate-400 truncate">developer@gmail.com</p>
+            <p class="text-[11px] text-slate-500 truncate">developer@gmail.com</p>
           </button>
 
-          <button type="button" onclick="quickFill('viewer@gmail.com', 'Viewer@123')" class="p-2.5 bg-slate-800/80 hover:bg-slate-750 border border-slate-700/60 rounded-lg text-left transition group">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-bold text-slate-400 group-hover:text-slate-300">VIEWER</span>
-              <i class="fa-solid fa-eye text-[10px] text-slate-400"></i>
+          <button type="button" onclick="quickFill('viewer@gmail.com', 'Viewer@123')" class="p-2.5 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-xs font-bold text-slate-600">VIEWER</span>
             </div>
-            <p class="text-[11px] text-slate-400 truncate">viewer@gmail.com</p>
+            <p class="text-[11px] text-slate-500 truncate">viewer@gmail.com</p>
           </button>
         </div>
       </div>
@@ -153,42 +146,41 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- 2. MAIN APPLICATION SHELL (Shown when authenticated) -->
+  <!-- 2. MAIN APPLICATION SHELL (Clean White/Cream + Icon-Free Sidebar) -->
   <!-- ========================================================================= -->
   <div id="view-app" class="flex-1 flex flex-col hidden h-screen overflow-hidden">
     
     <!-- Top Navigation -->
-    <header class="h-14 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 z-20 flex-shrink-0">
+    <header class="h-14 bg-white border-b border-stone-200 flex items-center justify-between px-4 z-20 flex-shrink-0">
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
-          <i class="fa-solid fa-cube"></i>
+        <div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center font-bold text-sm">
+          F
         </div>
         <div class="flex items-center space-x-2">
-          <span class="font-bold text-base text-white tracking-tight">FLINT</span>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 font-mono">v1.0.0</span>
+          <span class="font-bold text-base text-slate-900 tracking-tight">FLINT</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 text-slate-600 font-mono">v1.0.0</span>
         </div>
-        <div class="h-4 w-px bg-slate-800 mx-2"></div>
-        <div class="hidden sm:flex items-center space-x-1.5 text-xs text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Cluster: <strong class="text-slate-200">Production (US-East)</strong></span>
+        <div class="h-4 w-px bg-stone-200 mx-2"></div>
+        <div class="hidden sm:flex items-center space-x-1.5 text-xs text-slate-500">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Cluster: <strong class="text-slate-800">Production (US-East)</strong></span>
         </div>
       </div>
 
       <!-- User Profile & Actions -->
       <div class="flex items-center space-x-4">
-        <div id="header-user-badge" class="flex items-center space-x-2.5 text-xs bg-slate-850 border border-slate-800 rounded-lg px-3 py-1.5">
-          <div class="w-6 h-6 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-bold text-xs" id="user-avatar">
+        <div id="header-user-badge" class="flex items-center space-x-2.5 text-xs bg-[#faf8f5] border border-stone-200 rounded-lg px-3 py-1.5">
+          <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs" id="user-avatar">
             A
           </div>
           <div class="flex flex-col text-left">
-            <span class="font-medium text-slate-200" id="user-email-display">admin@gmail.com</span>
-            <span class="text-[10px] font-semibold text-emerald-400 uppercase" id="user-role-display">ADMIN</span>
+            <span class="font-medium text-slate-800" id="user-email-display">admin@gmail.com</span>
+            <span class="text-[10px] font-bold text-emerald-700 uppercase" id="user-role-display">ADMIN</span>
           </div>
         </div>
 
-        <button onclick="handleLogout()" class="text-xs text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-slate-800 transition flex items-center space-x-1" title="Sign Out">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
-          <span class="hidden sm:inline">Logout</span>
+        <button onclick="handleLogout()" class="text-xs text-slate-500 hover:text-rose-600 px-2.5 py-1.5 rounded-lg hover:bg-stone-100 transition flex items-center space-x-1" title="Sign Out">
+          <span class="hidden sm:inline font-medium">Sign Out</span>
         </button>
       </div>
     </header>
@@ -196,89 +188,76 @@
     <!-- Main Workspace (Sidebar + Content) -->
     <div class="flex-1 flex overflow-hidden">
       
-      <!-- Sidebar Navigation -->
-      <aside class="w-60 bg-slate-900/90 border-r border-slate-800 flex flex-col justify-between p-3 flex-shrink-0 select-none overflow-y-auto custom-scrollbar">
+      <!-- Sidebar Navigation (NO ICONS for options, Clean Minimal Cream Accent) -->
+      <aside class="w-56 bg-[#fbf9f5] border-r border-[#e8e3d8] flex flex-col justify-between p-3 flex-shrink-0 select-none overflow-y-auto custom-scrollbar">
         <div class="space-y-1">
-          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 mb-2">Core Services</p>
+          <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider px-3 mb-2">Core Services</p>
           
-          <button onclick="navigatePage('dashboard')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="dashboard">
-            <i class="fa-solid fa-chart-pie w-4 text-emerald-400"></i>
-            <span>Dashboard</span>
+          <button onclick="navigatePage('dashboard')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="dashboard">
+            Dashboard
           </button>
 
-          <button onclick="navigatePage('pipelines')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="pipelines">
-            <i class="fa-solid fa-diagram-project w-4 text-blue-400"></i>
-            <span>Pipelines (DAG)</span>
+          <button onclick="navigatePage('pipelines')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="pipelines">
+            Pipelines (DAG)
           </button>
 
-          <button onclick="navigatePage('deployments')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="deployments">
-            <i class="fa-solid fa-rocket w-4 text-purple-400"></i>
-            <span>Deployments</span>
+          <button onclick="navigatePage('deployments')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="deployments">
+            Deployments
           </button>
 
-          <button onclick="navigatePage('infrastructure')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="infrastructure">
-            <i class="fa-solid fa-server w-4 text-amber-400"></i>
-            <span>Infrastructure (IaC)</span>
+          <button onclick="navigatePage('infrastructure')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="infrastructure">
+            Infrastructure (IaC)
           </button>
 
-          <button onclick="navigatePage('security')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="security">
-            <i class="fa-solid fa-shield-halved w-4 text-rose-400"></i>
-            <span>Security & OPA</span>
+          <button onclick="navigatePage('security')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="security">
+            Security & OPA
           </button>
 
-          <button onclick="navigatePage('gitops')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="gitops">
-            <i class="fa-brands fa-git-alt w-4 text-orange-400"></i>
-            <span>GitOps Sync</span>
+          <button onclick="navigatePage('gitops')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="gitops">
+            GitOps Sync
           </button>
 
-          <button onclick="navigatePage('runners')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="runners">
-            <i class="fa-solid fa-microchip w-4 text-cyan-400"></i>
-            <span>Worker Runners</span>
+          <button onclick="navigatePage('runners')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="runners">
+            Worker Runners
           </button>
 
-          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 pt-4 mb-2">Telemetry & Audit</p>
+          <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider px-3 pt-4 mb-2">Telemetry & Audit</p>
 
-          <button onclick="navigatePage('monitoring')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="monitoring">
-            <i class="fa-solid fa-gauge-high w-4 text-indigo-400"></i>
-            <span>Monitoring</span>
+          <button onclick="navigatePage('monitoring')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="monitoring">
+            Monitoring
           </button>
 
-          <button onclick="navigatePage('logs')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="logs">
-            <i class="fa-solid fa-terminal w-4 text-yellow-400"></i>
-            <span>Central Logs</span>
+          <button onclick="navigatePage('logs')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="logs">
+            Central Logs
           </button>
 
-          <button onclick="navigatePage('audit')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="audit">
-            <i class="fa-solid fa-link w-4 text-emerald-400"></i>
-            <span>Audit Trail (SHA-256)</span>
+          <button onclick="navigatePage('audit')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="audit">
+            Audit Trail (SHA-256)
           </button>
 
-          <button onclick="navigatePage('reports')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="reports">
-            <i class="fa-solid fa-file-contract w-4 text-teal-400"></i>
-            <span>Executive Reports</span>
+          <button onclick="navigatePage('reports')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="reports">
+            Executive Reports
           </button>
 
-          <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 pt-4 mb-2">Management</p>
+          <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider px-3 pt-4 mb-2">Management</p>
 
-          <button id="nav-users-btn" onclick="navigatePage('users')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="users">
-            <i class="fa-solid fa-users-gear w-4 text-pink-400"></i>
-            <span>User Management</span>
+          <button id="nav-users-btn" onclick="navigatePage('users')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="users">
+            User Management
           </button>
 
-          <button onclick="navigatePage('settings')" class="nav-item w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition" data-page="settings">
-            <i class="fa-solid fa-sliders w-4 text-slate-400"></i>
-            <span>Settings</span>
+          <button onclick="navigatePage('settings')" class="nav-item w-full text-left px-3 py-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-[#efe9dc] transition" data-page="settings">
+            Settings
           </button>
         </div>
 
-        <div class="pt-4 border-t border-slate-800/80 text-[11px] text-slate-500 px-3">
-          <p>Flint Control Plane</p>
-          <p class="text-[10px] text-slate-600">Pure Local Simulation</p>
+        <div class="pt-4 border-t border-[#e8e3d8] text-[11px] text-stone-500 px-3">
+          <p class="font-medium">Flint Control Plane</p>
+          <p class="text-[10px] text-stone-400">Pure Local Simulation</p>
         </div>
       </aside>
 
       <!-- Main Dynamic Content Region -->
-      <main class="flex-1 bg-slate-950 overflow-y-auto p-6 custom-scrollbar" id="content-area">
+      <main class="flex-1 bg-[#faf9f6] overflow-y-auto p-6 custom-scrollbar" id="content-area">
         <!-- Rendered Page Components will inject here -->
       </main>
 
@@ -335,24 +314,15 @@
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      const icons = {
-        success: 'fa-circle-check text-emerald-400',
-        error: 'fa-triangle-exclamation text-rose-400',
-        warning: 'fa-circle-exclamation text-amber-400',
-        info: 'fa-circle-info text-blue-400'
-      };
       const borders = {
-        success: 'border-emerald-500/30 bg-slate-900',
-        error: 'border-rose-500/30 bg-slate-900',
-        warning: 'border-amber-500/30 bg-slate-900',
-        info: 'border-blue-500/30 bg-slate-900'
+        success: 'border-emerald-300 bg-white text-emerald-800 shadow-md',
+        error: 'border-rose-300 bg-white text-rose-800 shadow-md',
+        warning: 'border-amber-300 bg-white text-amber-800 shadow-md',
+        info: 'border-stone-300 bg-white text-slate-800 shadow-md'
       };
 
-      toast.className = `pointer-events-auto flex items-center space-x-3 px-4 py-3 rounded-xl border ${borders[type]} text-slate-100 text-xs shadow-xl transition-all duration-300 transform translate-y-2 opacity-0`;
-      toast.innerHTML = `
-        <i class="fa-solid ${icons[type]} text-base flex-shrink-0"></i>
-        <span class="flex-1">${message}</span>
-      `;
+      toast.className = `pointer-events-auto flex items-center space-x-2.5 px-4 py-3 rounded-xl border ${borders[type]} text-xs transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `<span class="flex-1 font-medium">${message}</span>`;
 
       container.appendChild(toast);
       setTimeout(() => {
@@ -433,19 +403,19 @@
     function navigatePage(pageName) {
       currentPage = pageName;
       
-      // Update sidebar active states
+      // Update sidebar active states (Cream Accent + Bold)
       document.querySelectorAll('.nav-item').forEach(btn => {
         if (btn.dataset.page === pageName) {
-          btn.classList.add('bg-slate-800', 'text-white', 'border-l-2', 'border-emerald-500');
-          btn.classList.remove('text-slate-300');
+          btn.classList.add('bg-[#ede5d6]', 'text-slate-950', 'font-bold');
+          btn.classList.remove('text-slate-700', 'font-medium');
         } else {
-          btn.classList.remove('bg-slate-800', 'text-white', 'border-l-2', 'border-emerald-500');
-          btn.classList.add('text-slate-300');
+          btn.classList.remove('bg-[#ede5d6]', 'text-slate-950', 'font-bold');
+          btn.classList.add('text-slate-700', 'font-medium');
         }
       });
 
       const container = document.getElementById('content-area');
-      container.innerHTML = '<div class="flex items-center justify-center h-64 text-slate-500"><i class="fa-solid fa-circle-notch fa-spin text-2xl"></i></div>';
+      container.innerHTML = '<div class="flex items-center justify-center h-64 text-slate-400 font-medium text-xs">Loading view...</div>';
 
       switch (pageName) {
         case 'dashboard': renderDashboardView(); break;
@@ -473,7 +443,6 @@
       document.getElementById('user-role-display').textContent = currentUser.role;
       document.getElementById('user-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
 
-      // Role based menu adjustments
       const userBtn = document.getElementById('nav-users-btn');
       if (currentUser.role !== 'ADMIN') {
         userBtn.classList.add('opacity-40');
@@ -500,7 +469,7 @@
     }
 
     // =========================================================================
-    // 4. SCREEN COMPONENT RENDERERS
+    // 4. SCREEN COMPONENT RENDERERS (Light White & Cream Theme)
     // =========================================================================
 
     // --- 4.1 DASHBOARD VIEW ---
@@ -510,71 +479,71 @@
 
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
-          <!-- Top Overview Stats -->
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div>
-            <h2 class="text-xl font-bold text-white tracking-tight">Platform Command Center</h2>
-            <p class="text-xs text-slate-400">Live health, pipeline telemetry, and deployment metrics</p>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Platform Command Center</h2>
+            <p class="text-xs text-slate-500">Live platform health, pipeline execution, and deployment telemetry</p>
           </div>
 
+          <!-- Top Metrics Cards -->
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Platform Health</span>
               <div class="flex items-center space-x-2 mt-2">
                 <span class="w-2.5 h-2.5 rounded-full ${data.platform_health === 'HEALTHY' ? 'bg-emerald-500' : 'bg-amber-500'}"></span>
-                <span class="text-base font-bold text-white">${data.platform_health}</span>
+                <span class="text-base font-bold text-slate-900">${data.platform_health}</span>
               </div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Active Pipelines</span>
-              <div class="text-2xl font-bold text-blue-400 mt-1">${data.active_pipelines}</div>
+              <div class="text-2xl font-bold text-blue-700 mt-1">${data.active_pipelines}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Deployments</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.successful_deployments}</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${data.successful_deployments}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Score</span>
-              <div class="text-2xl font-bold text-purple-400 mt-1">${data.security_score}%</div>
+              <div class="text-2xl font-bold text-purple-700 mt-1">${data.security_score}%</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Running Runners</span>
-              <div class="text-2xl font-bold text-cyan-400 mt-1">${data.running_runners} / 4</div>
+              <div class="text-2xl font-bold text-teal-700 mt-1">${data.running_runners} / 4</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Active Alerts</span>
-              <div class="text-2xl font-bold ${data.active_alerts > 0 ? 'text-rose-400' : 'text-slate-400'} mt-1">${data.active_alerts}</div>
+              <div class="text-2xl font-bold ${data.active_alerts > 0 ? 'text-rose-600' : 'text-slate-400'} mt-1">${data.active_alerts}</div>
             </div>
           </div>
 
           <!-- Main Dashboard Sections -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left: Active Deployments & Traffic -->
             <div class="lg:col-span-2 space-y-6">
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <!-- Active Canary Rollout -->
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-4">
                   <div>
-                    <h3 class="text-sm font-bold text-white">Active Progressive Canary Rollout</h3>
-                    <p class="text-xs text-slate-400">Kubernetes multi-cluster traffic distribution</p>
+                    <h3 class="text-sm font-bold text-slate-900">Active Progressive Canary Rollout</h3>
+                    <p class="text-xs text-slate-500">Multi-cluster traffic distribution</p>
                   </div>
-                  <span class="text-xs px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
+                  <span class="text-xs px-2.5 py-1 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold">
                     ${data.latest_deployment ? data.latest_deployment.strategy : 'CANARY'}
                   </span>
                 </div>
 
                 <div class="space-y-4">
                   <div>
-                    <div class="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+                    <div class="flex justify-between text-xs text-slate-700 mb-1.5 font-mono font-medium">
                       <span>Target Version (${data.latest_deployment ? data.latest_deployment.version : 'v2.4.0'})</span>
                       <span>${data.current_traffic_weight}% Traffic</span>
                     </div>
-                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
-                      <div class="bg-emerald-500 transition-all duration-500" style="width: ${data.current_traffic_weight}%"></div>
+                    <div class="w-full h-3 bg-stone-100 rounded-full overflow-hidden flex border border-stone-200">
+                      <div class="bg-emerald-600 transition-all duration-500" style="width: ${data.current_traffic_weight}%"></div>
                       <div class="bg-blue-600 transition-all duration-500" style="width: ${100 - data.current_traffic_weight}%"></div>
                     </div>
                     <div class="flex justify-between text-[11px] text-slate-500 mt-1 font-mono">
@@ -583,79 +552,68 @@
                     </div>
                   </div>
 
-                  <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
-                    <div class="text-xs text-slate-400">
-                      Error Rate: <strong class="text-emerald-400">0.01%</strong> | P99 Latency: <strong class="text-slate-200">14.2ms</strong>
+                  <div class="pt-4 border-t border-stone-100 flex items-center justify-between">
+                    <div class="text-xs text-slate-500">
+                      Error Rate: <strong class="text-emerald-700">0.01%</strong> | P99 Latency: <strong class="text-slate-800">14.2ms</strong>
                     </div>
-                    <button onclick="navigatePage('deployments')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 rounded-lg text-xs font-medium transition flex items-center space-x-1.5">
-                      <span>Manage Rollout</span>
-                      <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    <button onclick="navigatePage('deployments')" class="px-3 py-1.5 bg-[#fbf9f5] hover:bg-[#f3ede0] border border-stone-300 text-slate-800 rounded-lg text-xs font-semibold transition">
+                      Manage Rollout
                     </button>
                   </div>
                 </div>
               </div>
 
               <!-- Quick Pipeline Triggers -->
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
                 <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-sm font-bold text-white">Quick Pipeline Actions</h3>
-                  <button onclick="navigatePage('pipelines')" class="text-xs text-emerald-400 hover:underline">View All Pipelines</button>
+                  <h3 class="text-sm font-bold text-slate-900">Quick Pipeline Actions</h3>
+                  <button onclick="navigatePage('pipelines')" class="text-xs text-emerald-700 font-semibold hover:underline">View All Pipelines</button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button onclick="triggerQuickPipeline('pipe-web-prod')" class="p-3 bg-slate-850 hover:bg-slate-800 border border-slate-750 rounded-lg text-left transition flex items-center justify-between group">
-                    <div>
-                      <p class="text-xs font-bold text-white group-hover:text-emerald-400">Run Web API Pipeline</p>
-                      <p class="text-[11px] text-slate-400">7 DAG Stages (Security, Unit, Build, Deploy)</p>
-                    </div>
-                    <i class="fa-solid fa-play text-xs text-emerald-400"></i>
+                  <button onclick="triggerQuickPipeline('pipe-web-prod')" class="p-3 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+                    <p class="text-xs font-bold text-slate-900 group-hover:text-emerald-700">Run Web API Pipeline</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">7 DAG Stages (Security, Unit, Build, Deploy)</p>
                   </button>
 
-                  <button onclick="triggerQuickPipeline('pipe-auth-service')" class="p-3 bg-slate-850 hover:bg-slate-800 border border-slate-750 rounded-lg text-left transition flex items-center justify-between group">
-                    <div>
-                      <p class="text-xs font-bold text-white group-hover:text-blue-400">Run Auth Service Pipeline</p>
-                      <p class="text-[11px] text-slate-400">5 DAG Stages (RBAC, Crypto Tests)</p>
-                    </div>
-                    <i class="fa-solid fa-play text-xs text-blue-400"></i>
+                  <button onclick="triggerQuickPipeline('pipe-auth-service')" class="p-3 bg-[#fdfbf7] hover:bg-[#f7f3ea] border border-[#e5dfd3] rounded-lg text-left transition group">
+                    <p class="text-xs font-bold text-slate-900 group-hover:text-blue-700">Run Auth Service Pipeline</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">5 DAG Stages (RBAC, Crypto Tests)</p>
                   </button>
                 </div>
               </div>
             </div>
 
-            <!-- Right Column: Status Cards -->
+            <!-- Right Column -->
             <div class="space-y-6">
               <!-- Security Compliance Card -->
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-                <h3 class="text-sm font-bold text-white mb-3">Security Posture (OPA Rego)</h3>
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 mb-3">Security Posture (OPA Rego)</h3>
                 <div class="space-y-2.5 text-xs">
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
-                    <span class="text-slate-300">CIS 2.1.1 S3 Encryption</span>
-                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  <div class="flex items-center justify-between p-2.5 rounded bg-[#fdfbf7] border border-[#e8e3d8]">
+                    <span class="text-slate-700">CIS 2.1.1 S3 Encryption</span>
+                    <span class="text-emerald-700 font-bold">PASSED</span>
                   </div>
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
-                    <span class="text-slate-300">CIS 5.2.6 Non-Root Pods</span>
-                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  <div class="flex items-center justify-between p-2.5 rounded bg-[#fdfbf7] border border-[#e8e3d8]">
+                    <span class="text-slate-700">CIS 5.2.6 Non-Root Pods</span>
+                    <span class="text-emerald-700 font-bold">PASSED</span>
                   </div>
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
-                    <span class="text-slate-300">CIS 4.1.2 Port 22 SSH</span>
-                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check mr-1"></i>PASSED</span>
+                  <div class="flex items-center justify-between p-2.5 rounded bg-[#fdfbf7] border border-[#e8e3d8]">
+                    <span class="text-slate-700">CIS 4.1.2 Port 22 SSH</span>
+                    <span class="text-emerald-700 font-bold">PASSED</span>
                   </div>
-                  <div class="flex items-center justify-between p-2 rounded bg-slate-850 border border-slate-800">
-                    <span class="text-slate-300">Trivy Container CVEs</span>
-                    <span class="text-emerald-400 font-semibold">0 Critical</span>
+                  <div class="flex items-center justify-between p-2.5 rounded bg-[#fdfbf7] border border-[#e8e3d8]">
+                    <span class="text-slate-700">Trivy Container CVEs</span>
+                    <span class="text-emerald-700 font-bold">0 Critical</span>
                   </div>
                 </div>
               </div>
 
               <!-- Cryptographic Audit Status -->
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-sm font-bold text-white">Audit Trail Integrity</h3>
-                  <i class="fa-solid fa-link text-emerald-400 text-xs"></i>
-                </div>
-                <p class="text-xs text-slate-400 mb-3">All system transactions are cryptographically chained using SHA-256 genesis hashing.</p>
-                <button onclick="verifyAuditTrail()" class="w-full py-2 bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2">
-                  <i class="fa-solid fa-shield-check text-emerald-400"></i>
-                  <span>Verify Hash-Chain Integrity</span>
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 mb-2">Audit Trail Integrity</h3>
+                <p class="text-xs text-slate-500 mb-4">All transactions are cryptographically chained using SHA-256 genesis hashing.</p>
+                <button onclick="verifyAuditTrail()" class="w-full py-2 bg-[#faf7f2] hover:bg-[#f0ece1] border border-stone-300 text-slate-800 rounded-lg text-xs font-semibold transition">
+                  Verify Hash-Chain Integrity
                 </button>
               </div>
             </div>
@@ -664,7 +622,6 @@
       `;
     }
 
-    // Quick Trigger Helper from Dashboard
     async function triggerQuickPipeline(pipeId) {
       if (currentUser.role === 'VIEWER') {
         showToast('VIEWER role cannot trigger pipelines.', 'error');
@@ -678,7 +635,7 @@
       }
     }
 
-    // --- 4.2 PIPELINES VIEW (DAG Visualizer & Runs) ---
+    // --- 4.2 PIPELINES VIEW ---
     async function renderPipelinesView() {
       const [pipeData, runsData] = await Promise.all([
         apiRequest('/api/pipelines'),
@@ -691,16 +648,15 @@
 
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Continuous Delivery Pipelines</h2>
-              <p class="text-xs text-slate-400">Topological DAG dependency graph resolution & execution</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Continuous Delivery Pipelines</h2>
+              <p class="text-xs text-slate-500">Topological DAG dependency graph resolution & execution</p>
             </div>
             ${currentUser.role !== 'VIEWER' ? `
-              <button onclick="openCreatePipelineModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2 shadow-lg shadow-emerald-900/20">
-                <i class="fa-solid fa-plus"></i>
-                <span>Create Pipeline</span>
+              <button onclick="openCreatePipelineModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
+                Create Pipeline
               </button>
             ` : ''}
           </div>
@@ -708,37 +664,35 @@
           <!-- Pipelines List -->
           <div class="space-y-4">
             ${pipelines.map(pipe => `
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 space-y-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div class="flex items-center space-x-2">
-                      <h3 class="text-base font-bold text-white">${pipe.name}</h3>
-                      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400">${pipe.branch}</span>
+                      <h3 class="text-base font-bold text-slate-900">${pipe.name}</h3>
+                      <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-stone-100 border border-stone-200 text-slate-600">${pipe.branch}</span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-0.5">${pipe.description || pipe.repository}</p>
+                    <p class="text-xs text-slate-500 mt-0.5">${pipe.description || pipe.repository}</p>
                   </div>
 
                   <div class="flex items-center space-x-2">
                     ${currentUser.role !== 'VIEWER' ? `
-                      <button onclick="openRunPipelineModal('${pipe.id}', '${pipe.name}')" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                        <i class="fa-solid fa-play text-[10px]"></i>
-                        <span>Run Pipeline</span>
+                      <button onclick="openRunPipelineModal('${pipe.id}', '${pipe.name}')" class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-lg text-xs font-semibold transition">
+                        Run Pipeline
                       </button>
-                    ` : '<span class="text-xs text-slate-500 italic">Read-only mode</span>'}
+                    ` : '<span class="text-xs text-slate-400 italic">Read-only mode</span>'}
                   </div>
                 </div>
 
-                <!-- DAG Stages Pill View -->
+                <!-- DAG Stages Sequence -->
                 <div>
-                  <p class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">DAG Stages Sequence</p>
+                  <p class="text-[10px] font-bold text-stone-500 uppercase tracking-wider mb-2">DAG Stages Sequence</p>
                   <div class="flex flex-wrap items-center gap-2">
                     ${pipe.stages.map((stage, idx) => `
                       <div class="flex items-center">
-                        <div class="px-3 py-1.5 rounded-lg bg-slate-850 border border-slate-750 text-xs text-slate-200 flex items-center space-x-1.5">
-                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                          <span>${stage.name || stage.id}</span>
+                        <div class="px-3 py-1.5 rounded-lg bg-[#faf7f2] border border-[#e2dcd0] text-xs text-slate-800 font-medium">
+                          ${stage.name || stage.id}
                         </div>
-                        ${idx < pipe.stages.length - 1 ? '<i class="fa-solid fa-arrow-right text-[10px] text-slate-600 mx-2"></i>' : ''}
+                        ${idx < pipe.stages.length - 1 ? '<span class="text-stone-400 mx-2 font-bold">→</span>' : ''}
                       </div>
                     `).join('')}
                   </div>
@@ -748,11 +702,11 @@
           </div>
 
           <!-- Execution History Table -->
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <h3 class="text-sm font-bold text-white mb-4">Pipeline Execution History</h3>
+          <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-900 mb-4">Pipeline Execution History</h3>
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs text-slate-300">
-                <thead class="bg-slate-850 text-slate-400 uppercase text-[10px]">
+              <table class="w-full text-left text-xs text-slate-700">
+                <thead class="bg-[#faf7f2] text-slate-600 uppercase text-[10px] border-b border-stone-200">
                   <tr>
                     <th class="p-3">Run ID</th>
                     <th class="p-3">Pipeline</th>
@@ -763,24 +717,24 @@
                     <th class="p-3 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800">
-                  ${runs.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-500">No runs recorded yet</td></tr>' : ''}
+                <tbody class="divide-y divide-stone-100">
+                  ${runs.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400">No runs recorded yet</td></tr>' : ''}
                   ${runs.map(r => `
-                    <tr class="hover:bg-slate-850/50 transition">
-                      <td class="p-3 font-mono text-slate-400">${r.id}</td>
-                      <td class="p-3 font-semibold text-white">${r.pipeline_name}</td>
+                    <tr class="hover:bg-[#faf8f5] transition">
+                      <td class="p-3 font-mono text-slate-500">${r.id}</td>
+                      <td class="p-3 font-semibold text-slate-900">${r.pipeline_name}</td>
                       <td class="p-3">
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
-                          r.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                          r.status === 'FAILED' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                          'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                          r.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                          r.status === 'FAILED' ? 'bg-rose-50 text-rose-800 border border-rose-200' :
+                          'bg-amber-50 text-amber-800 border border-amber-200'
                         }">${r.status}</span>
                       </td>
-                      <td class="p-3 text-slate-400">${r.triggered_by}</td>
+                      <td class="p-3 text-slate-600">${r.triggered_by}</td>
                       <td class="p-3 font-mono">${r.duration_seconds}s</td>
                       <td class="p-3 text-slate-500">${new Date(r.completed_at * 1000).toLocaleTimeString()}</td>
                       <td class="p-3 text-right">
-                        <button onclick="viewPipelineRunLogs('${r.id}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[11px]">
+                        <button onclick="viewPipelineRunLogs('${r.id}')" class="px-2.5 py-1 bg-[#faf7f2] hover:bg-[#efe9dc] border border-stone-200 text-slate-700 rounded text-[11px] font-medium">
                           View Logs
                         </button>
                       </td>
@@ -794,50 +748,48 @@
       `;
     }
 
-    // Modal: Run Pipeline with Simulation Selection
     function openRunPipelineModal(pipeId, pipeName) {
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-base font-bold text-white">Execute Pipeline: ${pipeName}</h3>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-lg bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h3 class="text-base font-bold text-slate-900">Execute Pipeline: ${pipeName}</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
           <div class="space-y-3">
-            <label class="block text-xs font-semibold text-slate-300 uppercase">Select Execution Scenario</label>
+            <label class="block text-xs font-semibold text-slate-700 uppercase">Select Execution Scenario</label>
             <div class="space-y-2 text-xs">
-              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-emerald-500/50">
-                <input type="radio" name="sim_mode" value="NORMAL" checked class="mt-0.5 text-emerald-500">
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-[#fdfbf7] border border-[#e5dfd3] cursor-pointer hover:border-emerald-500">
+                <input type="radio" name="sim_mode" value="NORMAL" checked class="mt-0.5 text-emerald-600">
                 <div>
-                  <p class="font-bold text-white">Standard Production Run (Happy Path)</p>
-                  <p class="text-slate-400 text-[11px]">All 7 DAG stages pass and deploy to Kubernetes cluster.</p>
+                  <p class="font-bold text-slate-900">Standard Production Run (Happy Path)</p>
+                  <p class="text-slate-500 text-[11px]">All 7 DAG stages pass and deploy to Kubernetes cluster.</p>
                 </div>
               </label>
 
-              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-rose-500/50">
-                <input type="radio" name="sim_mode" value="FAIL_SECURITY" class="mt-0.5 text-rose-500">
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-[#fdfbf7] border border-[#e5dfd3] cursor-pointer hover:border-rose-500">
+                <input type="radio" name="sim_mode" value="FAIL_SECURITY" class="mt-0.5 text-rose-600">
                 <div>
-                  <p class="font-bold text-rose-400">Simulate Security Gate Block (CIS Violation)</p>
-                  <p class="text-slate-400 text-[11px]">Fails at Security Scan stage and blocks deployment.</p>
+                  <p class="font-bold text-rose-700">Simulate Security Gate Block (CIS Violation)</p>
+                  <p class="text-slate-500 text-[11px]">Fails at Security Scan stage and blocks deployment.</p>
                 </div>
               </label>
 
-              <label class="flex items-start space-x-3 p-3 rounded-lg bg-slate-850 border border-slate-750 cursor-pointer hover:border-amber-500/50">
-                <input type="radio" name="sim_mode" value="FAIL_TESTS" class="mt-0.5 text-amber-500">
+              <label class="flex items-start space-x-3 p-3 rounded-lg bg-[#fdfbf7] border border-[#e5dfd3] cursor-pointer hover:border-amber-500">
+                <input type="radio" name="sim_mode" value="FAIL_TESTS" class="mt-0.5 text-amber-600">
                 <div>
-                  <p class="font-bold text-amber-400">Simulate Unit/Integration Test Failure</p>
-                  <p class="text-slate-400 text-[11px]">Fails at Unit Test stage with test assertion errors.</p>
+                  <p class="font-bold text-amber-700">Simulate Unit/Integration Test Failure</p>
+                  <p class="text-slate-500 text-[11px]">Fails at Unit Test stage with assertion error.</p>
                 </div>
               </label>
             </div>
           </div>
 
-          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 hover:text-white rounded-lg text-xs font-medium">Cancel</button>
-            <button onclick="executePipelineRun('${pipeId}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition flex items-center space-x-2">
-              <i class="fa-solid fa-play"></i>
-              <span>Launch Run</span>
+          <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+            <button onclick="closeModal()" class="px-4 py-2 bg-stone-100 text-slate-700 rounded-lg text-xs font-medium">Cancel</button>
+            <button onclick="executePipelineRun('${pipeId}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition">
+              Launch Run
             </button>
           </div>
         </div>
@@ -867,67 +819,66 @@
 
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="w-full max-w-3xl bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4 max-h-[85vh] flex flex-col">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
             <div>
-              <h3 class="text-base font-bold text-white">${run.pipeline_name} — Run Logs</h3>
-              <p class="text-xs text-slate-400 font-mono">${run.id} | Commit: ${run.commit_sha}</p>
+              <h3 class="text-base font-bold text-slate-900">${run.pipeline_name} — Run Logs</h3>
+              <p class="text-xs text-slate-500 font-mono">${run.id} | Commit: ${run.commit_sha}</p>
             </div>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
-          <div class="flex-1 bg-black/80 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-200 overflow-y-auto custom-scrollbar whitespace-pre-wrap">
+          <div class="flex-1 bg-[#1e2430] border border-stone-800 rounded-xl p-4 font-mono text-xs text-slate-100 overflow-y-auto custom-scrollbar whitespace-pre-wrap">
 ${run.logs}
           </div>
 
-          <div class="flex justify-between items-center pt-2">
-            <span class="text-xs text-slate-400">Status: <strong class="${run.status === 'COMPLETED' ? 'text-emerald-400' : 'text-rose-400'}">${run.status}</strong></span>
-            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 hover:text-white rounded-lg text-xs font-medium">Close</button>
+          <div class="flex justify-between items-center pt-2 border-t border-stone-200">
+            <span class="text-xs text-slate-600">Status: <strong class="${run.status === 'COMPLETED' ? 'text-emerald-700' : 'text-rose-700'} font-bold">${run.status}</strong></span>
+            <button onclick="closeModal()" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-slate-700 rounded-lg text-xs font-medium">Close</button>
           </div>
         </div>
       `;
       modal.classList.remove('hidden');
     }
 
-    // Modal: Create Pipeline
     function openCreatePipelineModal() {
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-base font-bold text-white">Create New CI/CD Pipeline</h3>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-lg bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h3 class="text-base font-bold text-slate-900">Create New CI/CD Pipeline</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
           <form onsubmit="handleCreatePipeline(event)" class="space-y-3 text-xs">
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Pipeline Name</label>
+              <label class="block text-slate-700 font-semibold mb-1">Pipeline Name</label>
               <input type="text" id="new-pipe-name" required placeholder="e.g. Payment Processor Microservice"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
 
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Description</label>
+              <label class="block text-slate-700 font-semibold mb-1">Description</label>
               <input type="text" id="new-pipe-desc" placeholder="Production deployment pipeline"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
 
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Repository URL</label>
+                <label class="block text-slate-700 font-semibold mb-1">Repository URL</label>
                 <input type="text" id="new-pipe-repo" value="https://github.com/Kusuma-Podili/Flint"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Target Branch</label>
+                <label class="block text-slate-700 font-semibold mb-1">Target Branch</label>
                 <input type="text" id="new-pipe-branch" value="main"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
             </div>
 
-            <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg font-medium">Cancel</button>
-              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold">Create Pipeline</button>
+            <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-stone-100 text-slate-700 rounded-lg font-medium">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold">Create Pipeline</button>
             </div>
           </form>
         </div>
@@ -958,7 +909,7 @@ ${run.logs}
       }
     }
 
-    // --- 4.3 DEPLOYMENTS VIEW (Canary, Blue-Green & Rollback) ---
+    // --- 4.3 DEPLOYMENTS VIEW ---
     async function renderDeploymentsView() {
       const data = await apiRequest('/api/deployments');
       if (!data) return;
@@ -966,85 +917,77 @@ ${run.logs}
       const deployments = data.deployments || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Deployments & Traffic Controllers</h2>
-              <p class="text-xs text-slate-400">Zero-downtime Canary traffic shifting and Blue-Green management</p>
-            </div>
+        <div class="space-y-6 max-w-7xl mx-auto">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Deployments & Traffic Controllers</h2>
+            <p class="text-xs text-slate-500">Zero-downtime Canary traffic shifting and Blue-Green management</p>
           </div>
 
-          <!-- Deployments List -->
           <div class="space-y-4">
             ${deployments.map(dep => `
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 space-y-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <div class="flex items-center space-x-3">
-                      <h3 class="text-base font-bold text-white">${dep.application}</h3>
-                      <span class="text-xs px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">${dep.version}</span>
+                      <h3 class="text-base font-bold text-slate-900">${dep.application}</h3>
+                      <span class="text-xs px-2 py-0.5 rounded bg-stone-100 border border-stone-200 text-slate-700 font-mono">${dep.version}</span>
                       <span class="text-xs px-2 py-0.5 rounded font-bold ${
-                        dep.status === 'HEALTHY' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        dep.status === 'ROLLED_BACK' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                        'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                        dep.status === 'HEALTHY' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                        dep.status === 'ROLLED_BACK' ? 'bg-amber-50 text-amber-800 border border-amber-200' :
+                        'bg-blue-50 text-blue-800 border border-blue-200'
                       }">${dep.status}</span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">${dep.environment} | Strategy: <strong>${dep.strategy}</strong> | Deployed by: ${dep.deployed_by}</p>
+                    <p class="text-xs text-slate-500 mt-1">${dep.environment} | Strategy: <strong>${dep.strategy}</strong> | Deployed by: ${dep.deployed_by}</p>
                   </div>
 
-                  <!-- Actions -->
                   <div class="flex items-center space-x-2">
                     ${currentUser.role !== 'VIEWER' ? `
                       ${dep.strategy === 'CANARY' && dep.status !== 'ROLLED_BACK' ? `
-                        <button onclick="promoteCanary('${dep.id}')" class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                          <i class="fa-solid fa-arrow-up-right-dots"></i>
-                          <span>Promote Canary (+25%)</span>
+                        <button onclick="promoteCanary('${dep.id}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-lg text-xs font-semibold transition">
+                          Promote Canary (+25%)
                         </button>
                       ` : ''}
 
                       ${dep.strategy === 'BLUE_GREEN' && dep.status !== 'ROLLED_BACK' ? `
-                        <button onclick="switchBlueGreen('${dep.id}')" class="px-3 py-1.5 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                          <i class="fa-solid fa-repeat"></i>
-                          <span>Switch to ${dep.blue_green_active === 'blue' ? 'GREEN' : 'BLUE'}</span>
+                        <button onclick="switchBlueGreen('${dep.id}')" class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-purple-800 rounded-lg text-xs font-semibold transition">
+                          Switch to ${dep.blue_green_active === 'blue' ? 'GREEN' : 'BLUE'}
                         </button>
                       ` : ''}
 
                       ${dep.status !== 'ROLLED_BACK' ? `
-                        <button onclick="openRollbackModal('${dep.id}')" class="px-3 py-1.5 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                          <i class="fa-solid fa-clock-rotate-left"></i>
-                          <span>Rollback</span>
+                        <button onclick="openRollbackModal('${dep.id}')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-800 rounded-lg text-xs font-semibold transition">
+                          Rollback
                         </button>
                       ` : ''}
-                    ` : '<span class="text-xs text-slate-500 italic">Read-only mode</span>'}
+                    ` : '<span class="text-xs text-slate-400 italic">Read-only mode</span>'}
                   </div>
                 </div>
 
-                <!-- Strategy Specific Visualizer -->
                 ${dep.strategy === 'CANARY' ? `
-                  <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg">
-                    <div class="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+                  <div class="p-3 bg-[#fdfbf7] border border-[#e5dfd3] rounded-lg">
+                    <div class="flex justify-between text-xs text-slate-700 mb-1.5 font-mono font-medium">
                       <span>Canary Traffic Distribution</span>
                       <span>${dep.canary_weight}% Target / ${100 - dep.canary_weight}% Baseline</span>
                     </div>
-                    <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden flex">
-                      <div class="bg-emerald-500 transition-all duration-500" style="width: ${dep.canary_weight}%"></div>
+                    <div class="w-full h-3 bg-stone-100 rounded-full overflow-hidden flex border border-stone-200">
+                      <div class="bg-emerald-600 transition-all duration-500" style="width: ${dep.canary_weight}%"></div>
                       <div class="bg-blue-600 transition-all duration-500" style="width: ${100 - dep.canary_weight}%"></div>
                     </div>
                   </div>
                 ` : `
-                  <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+                  <div class="p-3 bg-[#fdfbf7] border border-[#e5dfd3] rounded-lg flex items-center justify-between text-xs">
                     <div class="flex items-center space-x-4">
                       <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'blue' ? 'bg-blue-500' : 'bg-slate-700'}"></span>
-                        <span class="${dep.blue_green_active === 'blue' ? 'font-bold text-white' : 'text-slate-500'}">BLUE (Production)</span>
+                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'blue' ? 'bg-blue-600' : 'bg-stone-300'}"></span>
+                        <span class="${dep.blue_green_active === 'blue' ? 'font-bold text-slate-900' : 'text-slate-400'}">BLUE (Production)</span>
                       </div>
-                      <i class="fa-solid fa-arrow-right-arrow-left text-slate-600 text-xs"></i>
+                      <span class="text-stone-400">⇄</span>
                       <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'green' ? 'bg-emerald-500' : 'bg-slate-700'}"></span>
-                        <span class="${dep.blue_green_active === 'green' ? 'font-bold text-white' : 'text-slate-500'}">GREEN (${dep.blue_green_active === 'green' ? 'Active' : 'Standby'})</span>
+                        <span class="w-3 h-3 rounded-full ${dep.blue_green_active === 'green' ? 'bg-emerald-600' : 'bg-stone-300'}"></span>
+                        <span class="${dep.blue_green_active === 'green' ? 'font-bold text-slate-900' : 'text-slate-400'}">GREEN (${dep.blue_green_active === 'green' ? 'Active' : 'Standby'})</span>
                       </div>
                     </div>
-                    <span class="text-[11px] text-slate-400">Zero-downtime routing active</span>
+                    <span class="text-[11px] text-slate-500">Zero-downtime routing</span>
                   </div>
                 `}
               </div>
@@ -1073,27 +1016,26 @@ ${run.logs}
     function openRollbackModal(depId) {
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-base font-bold text-rose-400">Trigger Deployment Rollback</h3>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-md bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h3 class="text-base font-bold text-rose-700">Trigger Deployment Rollback</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
           <div class="space-y-3 text-xs">
-            <p class="text-slate-300">Are you sure you want to rollback deployment <strong class="text-white font-mono">${depId}</strong>? This will immediately restore 100% traffic to the prior stable release.</p>
+            <p class="text-slate-700">Rollback deployment <strong class="text-slate-900 font-mono">${depId}</strong>? This will immediately restore 100% traffic to the prior stable release.</p>
             
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Rollback Reason</label>
+              <label class="block text-slate-700 font-semibold mb-1">Rollback Reason</label>
               <input type="text" id="rollback-reason" value="High error rate threshold breach on telemetry"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
           </div>
 
-          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-medium">Cancel</button>
-            <button onclick="executeRollback('${depId}')" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition flex items-center space-x-2">
-              <i class="fa-solid fa-clock-rotate-left"></i>
-              <span>Confirm Rollback</span>
+          <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+            <button onclick="closeModal()" class="px-4 py-2 bg-stone-100 text-slate-700 rounded-lg text-xs font-medium">Cancel</button>
+            <button onclick="executeRollback('${depId}')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition">
+              Confirm Rollback
             </button>
           </div>
         </div>
@@ -1111,7 +1053,7 @@ ${run.logs}
       }
     }
 
-    // --- 4.4 INFRASTRUCTURE & DRIFT VIEW ---
+    // --- 4.4 INFRASTRUCTURE VIEW ---
     async function renderInfrastructureView() {
       const data = await apiRequest('/api/infrastructure');
       if (!data) return;
@@ -1121,51 +1063,46 @@ ${run.logs}
 
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Multi-Cloud Infrastructure (IaC)</h2>
-              <p class="text-xs text-slate-400">Terraform / OpenTofu state locking, plan analysis, and drift detection</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Multi-Cloud Infrastructure (IaC)</h2>
+              <p class="text-xs text-slate-500">Terraform / OpenTofu state locking, plan analysis, and drift detection</p>
             </div>
             ${currentUser.role !== 'VIEWER' ? `
-              <div class="flex items-center space-x-2">
-                <button onclick="runDriftDetection()" class="px-3 py-2 bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                  <span>Run Drift Detection</span>
-                </button>
-              </div>
+              <button onclick="runDriftDetection()" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-800 rounded-lg text-xs font-semibold transition">
+                Run Drift Detection
+              </button>
             ` : ''}
           </div>
 
-          <!-- Terraform Summary Metrics -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Managed Resources</span>
-              <div class="text-2xl font-bold text-white mt-1">${summary.total_resources || 5}</div>
+              <div class="text-2xl font-bold text-slate-900 mt-1">${summary.total_resources || 5}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Plan: To Add</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${summary.to_add || 0}</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${summary.to_add || 0}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Plan: To Update</span>
-              <div class="text-2xl font-bold text-blue-400 mt-1">${summary.to_update || 0}</div>
+              <div class="text-2xl font-bold text-blue-700 mt-1">${summary.to_update || 0}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Drift Detected</span>
-              <div class="text-2xl font-bold ${summary.drift_count > 0 ? 'text-rose-400' : 'text-slate-400'} mt-1">${summary.drift_count || 0}</div>
+              <div class="text-2xl font-bold ${summary.drift_count > 0 ? 'text-rose-600' : 'text-slate-400'} mt-1">${summary.drift_count || 0}</div>
             </div>
           </div>
 
-          <!-- Resources Table -->
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <h3 class="text-sm font-bold text-white mb-4">Provisioned Cloud Resources</h3>
+          <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-900 mb-4">Provisioned Cloud Resources</h3>
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs text-slate-300">
-                <thead class="bg-slate-850 text-slate-400 uppercase text-[10px]">
+              <table class="w-full text-left text-xs text-slate-700">
+                <thead class="bg-[#faf7f2] text-slate-600 uppercase text-[10px] border-b border-stone-200">
                   <tr>
                     <th class="p-3">Resource Identifier</th>
                     <th class="p-3">Type</th>
@@ -1174,16 +1111,16 @@ ${run.logs}
                     <th class="p-3">Drift State</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+                <tbody class="divide-y divide-stone-100 font-mono text-[11px]">
                   ${resources.map(res => `
-                    <tr class="hover:bg-slate-850/50 transition">
-                      <td class="p-3 font-semibold text-white">${res.resource_name}</td>
-                      <td class="p-3 text-slate-400">${res.resource_type}</td>
-                      <td class="p-3 text-slate-400">${res.provider}</td>
-                      <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${res.status}</span></td>
+                    <tr class="hover:bg-[#faf8f5] transition">
+                      <td class="p-3 font-semibold text-slate-900">${res.resource_name}</td>
+                      <td class="p-3 text-slate-500">${res.resource_type}</td>
+                      <td class="p-3 text-slate-500">${res.provider}</td>
+                      <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${res.status}</span></td>
                       <td class="p-3">
                         <span class="px-2 py-0.5 rounded font-bold ${
-                          res.drift_detected ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-slate-800 text-slate-400'
+                          res.drift_detected ? 'bg-rose-50 text-rose-800 border border-rose-200' : 'bg-stone-100 text-slate-600'
                         }">
                           ${res.drift_detected ? 'DRIFT DETECTED' : 'IN SYNC'}
                         </span>
@@ -1215,25 +1152,25 @@ ${run.logs}
     function openDriftModal(details) {
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-base font-bold text-amber-400"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Infrastructure Drift Detected</h3>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-lg bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h3 class="text-base font-bold text-amber-800">Infrastructure Drift Detected</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
           <div class="space-y-3 text-xs">
-            <p class="text-slate-300">${details.message}</p>
-            <div class="p-3 bg-black/60 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1">
-              <p class="text-slate-400">Resource: <strong class="text-white">${details.resource}</strong></p>
-              <p class="text-emerald-400">Desired: ${JSON.stringify(details.desired)}</p>
-              <p class="text-rose-400">Actual:  ${JSON.stringify(details.actual)}</p>
+            <p class="text-slate-700">${details.message}</p>
+            <div class="p-3 bg-[#fdfbf7] rounded-lg border border-[#e2dcd0] font-mono text-[11px] space-y-1">
+              <p class="text-slate-600">Resource: <strong class="text-slate-900">${details.resource}</strong></p>
+              <p class="text-emerald-800">Desired: ${JSON.stringify(details.desired)}</p>
+              <p class="text-rose-800">Actual:  ${JSON.stringify(details.actual)}</p>
             </div>
           </div>
 
-          <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-            <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-medium">Dismiss</button>
+          <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+            <button onclick="closeModal()" class="px-4 py-2 bg-stone-100 text-slate-700 rounded-lg text-xs font-medium">Dismiss</button>
             ${currentUser.role !== 'VIEWER' && currentUser.role !== 'DEVELOPER' ? `
-              <button onclick="remediateDrift()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition">
+              <button onclick="remediateDrift()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition">
                 Reconcile & Remediate Drift
               </button>
             ` : ''}
@@ -1252,7 +1189,7 @@ ${run.logs}
       }
     }
 
-    // --- 4.5 SECURITY & OPA VIEW ---
+    // --- 4.5 SECURITY VIEW ---
     async function renderSecurityView() {
       const data = await apiRequest('/api/security');
       if (!data) return;
@@ -1260,58 +1197,55 @@ ${run.logs}
       const findings = data.findings || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Security, OPA Rego & Vulnerability Gate</h2>
-              <p class="text-xs text-slate-400">Continuous DevSecOps governance and CIS benchmark policies</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Security, OPA Rego & Vulnerability Gate</h2>
+              <p class="text-xs text-slate-500">Continuous DevSecOps governance and CIS benchmark policies</p>
             </div>
             ${currentUser.role !== 'VIEWER' ? `
-              <button onclick="triggerSecurityScan()" class="px-3 py-2 bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/30 text-rose-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-shield-virus"></i>
-                <span>Run Full Security Scan</span>
+              <button onclick="triggerSecurityScan()" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-800 rounded-lg text-xs font-semibold transition">
+                Run Full Security Scan
               </button>
             ` : ''}
           </div>
 
-          <!-- Security Score Overview -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Score</span>
-              <div class="text-2xl font-bold text-purple-400 mt-1">${data.security_score}% (Grade A+)</div>
+              <div class="text-2xl font-bold text-purple-700 mt-1">${data.security_score}% (Grade A+)</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Critical CVEs</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.critical_count}</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${data.critical_count}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">High CVEs</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.high_count}</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${data.high_count}</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Policy Violations</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${data.policy_violations}</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${data.policy_violations}</div>
             </div>
           </div>
 
-          <!-- Compliance Findings Table -->
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <h3 class="text-sm font-bold text-white mb-4">OPA Rego & Trivy Security Checks</h3>
+          <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-900 mb-4">OPA Rego & Trivy Security Checks</h3>
             <div class="space-y-3">
               ${findings.map(f => `
-                <div class="p-3.5 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between">
+                <div class="p-3.5 bg-[#fdfbf7] border border-[#e8e3d8] rounded-lg flex items-center justify-between">
                   <div class="space-y-1">
                     <div class="flex items-center space-x-2">
-                      <span class="text-xs font-bold text-white">${f.rule}</span>
-                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400">${f.type}</span>
+                      <span class="text-xs font-bold text-slate-900">${f.rule}</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-stone-100 text-slate-600">${f.type}</span>
                     </div>
-                    <p class="text-xs text-slate-400">${f.description}</p>
+                    <p class="text-xs text-slate-500">${f.description}</p>
                   </div>
-                  <span class="text-xs px-2.5 py-1 rounded font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <i class="fa-solid fa-check mr-1"></i>${f.status}
+                  <span class="text-xs px-2.5 py-1 rounded font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    ${f.status}
                   </span>
                 </div>
               `).join('')}
@@ -1337,41 +1271,40 @@ ${run.logs}
 
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">GitOps Continuous Reconciliation</h2>
-              <p class="text-xs text-slate-400">Declarative desired state synchronization with Git repository</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">GitOps Continuous Reconciliation</h2>
+              <p class="text-xs text-slate-500">Declarative desired state synchronization with Git repository</p>
             </div>
             ${currentUser.role !== 'VIEWER' ? `
-              <button onclick="reconcileGitOps()" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                <span>Reconcile Now</span>
+              <button onclick="reconcileGitOps()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition">
+                Reconcile Now
               </button>
             ` : ''}
           </div>
 
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+          <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 space-y-4 shadow-sm">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="p-4 bg-slate-850 border border-slate-800 rounded-lg space-y-2">
-                <span class="text-[10px] font-semibold text-slate-500 uppercase">Git Source Repository</span>
-                <p class="text-xs font-mono text-white">${data.repo_url || 'https://github.com/Kusuma-Podili/Flint.git'}</p>
-                <p class="text-xs text-slate-400">Branch: <strong class="text-slate-200">${data.target_branch || 'main'}</strong></p>
+              <div class="p-4 bg-[#fdfbf7] border border-[#e8e3d8] rounded-lg space-y-1">
+                <span class="text-[10px] font-bold text-stone-500 uppercase">Git Source Repository</span>
+                <p class="text-xs font-mono text-slate-900">${data.repo_url || 'https://github.com/Kusuma-Podili/Flint.git'}</p>
+                <p class="text-xs text-slate-500">Branch: <strong class="text-slate-800">${data.target_branch || 'main'}</strong></p>
               </div>
 
-              <div class="p-4 bg-slate-850 border border-slate-800 rounded-lg space-y-2">
-                <span class="text-[10px] font-semibold text-slate-500 uppercase">Sync Status</span>
+              <div class="p-4 bg-[#fdfbf7] border border-[#e8e3d8] rounded-lg space-y-1">
+                <span class="text-[10px] font-bold text-stone-500 uppercase">Sync Status</span>
                 <div class="flex items-center space-x-2">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                  <span class="text-sm font-bold text-emerald-400">${data.sync_status || 'IN_SYNC'}</span>
+                  <span class="text-sm font-bold text-emerald-800">${data.sync_status || 'IN_SYNC'}</span>
                 </div>
-                <p class="text-xs text-slate-400 font-mono">Commit SHA: ${data.synced_commit || '589532f'}</p>
+                <p class="text-xs text-slate-500 font-mono">Commit SHA: ${data.synced_commit || '589532f'}</p>
               </div>
             </div>
 
-            <div class="pt-4 border-t border-slate-800">
-              <h4 class="text-xs font-bold text-white mb-2">Cluster Declarative Manifest State</h4>
-              <pre class="bg-black/60 p-3 rounded-lg border border-slate-800 font-mono text-xs text-slate-300">
+            <div class="pt-4 border-t border-stone-100">
+              <h4 class="text-xs font-bold text-slate-900 mb-2">Cluster Declarative Manifest State</h4>
+              <pre class="bg-[#1e2430] p-3 rounded-lg border border-stone-800 font-mono text-xs text-slate-100">
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1408,49 +1341,47 @@ spec:
       const runners = data.runners || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Worker Runner Daemons</h2>
-              <p class="text-xs text-slate-400">Isolated agent processes executing DAG tasks in container sandboxes</p>
-            </div>
+        <div class="space-y-6 max-w-7xl mx-auto">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Worker Runner Daemons</h2>
+            <p class="text-xs text-slate-500">Isolated agent processes executing DAG tasks in container sandboxes</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             ${runners.map(r => `
-              <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3">
+              <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 space-y-3 shadow-sm">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-2.5">
-                    <span class="w-2.5 h-2.5 rounded-full ${r.status === 'IDLE' ? 'bg-emerald-500' : r.status === 'BUSY' ? 'bg-blue-500' : 'bg-slate-600'}"></span>
-                    <h3 class="text-sm font-bold text-white font-mono">${r.name}</h3>
+                    <span class="w-2.5 h-2.5 rounded-full ${r.status === 'IDLE' ? 'bg-emerald-500' : r.status === 'BUSY' ? 'bg-blue-500' : 'bg-stone-400'}"></span>
+                    <h3 class="text-sm font-bold text-slate-900 font-mono">${r.name}</h3>
                   </div>
                   <span class="text-xs px-2 py-0.5 rounded font-bold ${
-                    r.status === 'IDLE' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                    r.status === 'BUSY' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                    'bg-slate-800 text-slate-400'
+                    r.status === 'IDLE' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                    r.status === 'BUSY' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+                    'bg-stone-100 text-slate-600'
                   }">${r.status}</span>
                 </div>
 
-                <div class="space-y-1.5 text-xs text-slate-400">
+                <div class="space-y-1.5 text-xs text-slate-500">
                   <div class="flex justify-between">
                     <span>CPU Utilization:</span>
-                    <span class="text-slate-200 font-mono">${r.cpu_percent}%</span>
+                    <span class="text-slate-800 font-mono">${r.cpu_percent}%</span>
                   </div>
-                  <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full" style="width: ${r.cpu_percent * 2}%"></div>
+                  <div class="w-full h-1.5 bg-stone-100 rounded-full overflow-hidden border border-stone-200">
+                    <div class="bg-emerald-600 h-full" style="width: ${r.cpu_percent * 2}%"></div>
                   </div>
                 </div>
 
                 <div class="flex flex-wrap gap-1.5 pt-2">
-                  ${r.tags.map(t => `<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-850 border border-slate-750 text-slate-400">${t}</span>`).join('')}
+                  ${r.tags.map(t => `<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#fdfbf7] border border-[#e2dcd0] text-slate-600">${t}</span>`).join('')}
                 </div>
 
                 ${currentUser.role !== 'VIEWER' ? `
-                  <div class="pt-3 border-t border-slate-800 flex justify-end space-x-2">
-                    <button onclick="drainRunner('${r.id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-750 text-slate-300 rounded text-xs">
+                  <div class="pt-3 border-t border-stone-100 flex justify-end space-x-2">
+                    <button onclick="drainRunner('${r.id}')" class="px-2.5 py-1 bg-[#faf7f2] hover:bg-[#efe9dc] text-slate-700 rounded text-xs font-medium border border-stone-200">
                       Drain
                     </button>
-                    <button onclick="toggleRunner('${r.id}')" class="px-2.5 py-1 ${r.enabled ? 'bg-rose-600/20 text-rose-300 hover:bg-rose-600/30' : 'bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30'} rounded text-xs font-semibold">
+                    <button onclick="toggleRunner('${r.id}')" class="px-2.5 py-1 ${r.enabled ? 'bg-rose-50 text-rose-800 border border-rose-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'} rounded text-xs font-bold">
                       ${r.enabled ? 'Disable' : 'Enable'}
                     </button>
                   </div>
@@ -1488,50 +1419,49 @@ spec:
 
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div>
-            <h2 class="text-xl font-bold text-white tracking-tight">Platform Telemetry & Live Metrics</h2>
-            <p class="text-xs text-slate-400">Prometheus metrics exporter and active threshold incident alerts</p>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Platform Telemetry & Live Metrics</h2>
+            <p class="text-xs text-slate-500">Prometheus metrics exporter and active threshold incident alerts</p>
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Throughput</span>
-              <div class="text-2xl font-bold text-white mt-1">${metrics.requests_per_second} req/s</div>
+              <div class="text-2xl font-bold text-slate-900 mt-1">${metrics.requests_per_second} req/s</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">P99 Latency</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${metrics.latency_p99_ms} ms</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${metrics.latency_p99_ms} ms</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Error Rate</span>
-              <div class="text-2xl font-bold text-emerald-400 mt-1">${metrics.error_rate_percent}%</div>
+              <div class="text-2xl font-bold text-emerald-700 mt-1">${metrics.error_rate_percent}%</div>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+            <div class="bg-white border border-[#e8e3d8] p-4 rounded-xl shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Cluster CPU</span>
-              <div class="text-2xl font-bold text-blue-400 mt-1">${metrics.cpu_utilization_percent}%</div>
+              <div class="text-2xl font-bold text-blue-700 mt-1">${metrics.cpu_utilization_percent}%</div>
             </div>
           </div>
 
-          <!-- Active Alerts -->
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-5">
-            <h3 class="text-sm font-bold text-white mb-4">Active System Incidents & Alerts</h3>
+          <div class="bg-white border border-[#e8e3d8] rounded-xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-900 mb-4">Active System Incidents & Alerts</h3>
             <div class="space-y-3">
-              ${alerts.length === 0 ? '<p class="text-xs text-slate-500 italic p-3">No active alerts. All system health thresholds normal.</p>' : ''}
+              ${alerts.length === 0 ? '<p class="text-xs text-slate-400 italic p-3">No active alerts. All system health thresholds normal.</p>' : ''}
               ${alerts.map(a => `
-                <div class="p-3 bg-slate-850 border border-slate-800 rounded-lg flex items-center justify-between">
+                <div class="p-3 bg-[#fdfbf7] border border-[#e8e3d8] rounded-lg flex items-center justify-between">
                   <div>
                     <div class="flex items-center space-x-2">
-                      <span class="text-xs font-bold text-rose-400">${a.rule_name}</span>
-                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">${a.severity}</span>
+                      <span class="text-xs font-bold text-rose-700">${a.rule_name}</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-800 border border-rose-200 font-bold">${a.severity}</span>
                     </div>
-                    <p class="text-xs text-slate-400 mt-0.5">${a.message}</p>
+                    <p class="text-xs text-slate-500 mt-0.5">${a.message}</p>
                   </div>
                   ${currentUser.role !== 'VIEWER' ? `
-                    <button onclick="resolveAlert('${a.id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-xs">
+                    <button onclick="resolveAlert('${a.id}')" class="px-2.5 py-1 bg-[#faf7f2] hover:bg-[#efe9dc] text-slate-700 rounded text-xs font-medium border border-stone-200">
                       Resolve
                     </button>
                   ` : ''}
@@ -1559,26 +1489,25 @@ spec:
       const logs = data.logs || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Centralized Execution Logs</h2>
-              <p class="text-xs text-slate-400">Structured audit events from pipelines, deployments, and security scanners</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Centralized Execution Logs</h2>
+              <p class="text-xs text-slate-500">Structured audit events from pipelines, deployments, and security scanners</p>
             </div>
 
-            <!-- Filter Controls -->
             <div class="flex items-center space-x-2">
               ${['ALL', 'INFO', 'WARNING', 'ERROR'].map(lvl => `
                 <button onclick="renderLogsView('${lvl}')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  levelFilter === lvl ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  levelFilter === lvl ? 'bg-emerald-700 text-white' : 'bg-white border border-stone-300 text-slate-700 hover:bg-stone-50'
                 }">${lvl}</button>
               `).join('')}
             </div>
           </div>
 
-          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div class="bg-white border border-[#e8e3d8] rounded-xl overflow-hidden shadow-sm">
             <table class="w-full text-left text-xs font-mono">
-              <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+              <thead class="bg-[#faf7f2] text-slate-600 text-[10px] uppercase border-b border-stone-200">
                 <tr>
                   <th class="p-3">Timestamp</th>
                   <th class="p-3">Level</th>
@@ -1587,20 +1516,20 @@ spec:
                   <th class="p-3">Message</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800 text-slate-300">
+              <tbody class="divide-y divide-stone-100 text-slate-800">
                 ${logs.map(l => `
-                  <tr class="hover:bg-slate-850/50">
-                    <td class="p-3 text-slate-500 whitespace-nowrap">${new Date(l.timestamp * 1000).toLocaleTimeString()}</td>
+                  <tr class="hover:bg-[#faf8f5]">
+                    <td class="p-3 text-slate-400 whitespace-nowrap">${new Date(l.timestamp * 1000).toLocaleTimeString()}</td>
                     <td class="p-3">
                       <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                        l.level === 'INFO' ? 'text-blue-400' :
-                        l.level === 'WARNING' ? 'text-amber-400' :
-                        l.level === 'ERROR' ? 'text-rose-400' : 'text-emerald-400'
+                        l.level === 'INFO' ? 'text-blue-700 bg-blue-50' :
+                        l.level === 'WARNING' ? 'text-amber-700 bg-amber-50' :
+                        l.level === 'ERROR' ? 'text-rose-700 bg-rose-50' : 'text-emerald-700 bg-emerald-50'
                       }">${l.level}</span>
                     </td>
-                    <td class="p-3 text-slate-400">${l.source}</td>
-                    <td class="p-3 text-slate-400">${l.user_email}</td>
-                    <td class="p-3 text-slate-200">${l.message}</td>
+                    <td class="p-3 text-slate-500 font-semibold">${l.source}</td>
+                    <td class="p-3 text-slate-500">${l.user_email}</td>
+                    <td class="p-3 text-slate-900">${l.message}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -1610,7 +1539,7 @@ spec:
       `;
     }
 
-    // --- 4.10 AUDIT TRAIL VIEW (SHA-256 Hash Chaining) ---
+    // --- 4.10 AUDIT TRAIL VIEW ---
     async function renderAuditView() {
       const data = await apiRequest('/api/audit');
       if (!data) return;
@@ -1618,22 +1547,21 @@ spec:
       const chain = data.audit_chain || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Cryptographic Hash-Chained Audit Log</h2>
-              <p class="text-xs text-slate-400">SOC2 / ISO 27001 compliant SHA-256 tamper-evident transaction ledger</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Cryptographic Hash-Chained Audit Log</h2>
+              <p class="text-xs text-slate-500">SOC2 / ISO 27001 compliant SHA-256 tamper-evident transaction ledger</p>
             </div>
-            <button onclick="verifyAuditTrail()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2">
-              <i class="fa-solid fa-shield-halved"></i>
-              <span>Verify Chain Integrity</span>
+            <button onclick="verifyAuditTrail()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
+              Verify Chain Integrity
             </button>
           </div>
 
-          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+          <div class="bg-white border border-[#e8e3d8] rounded-xl overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs font-mono">
-                <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+                <thead class="bg-[#faf7f2] text-slate-600 text-[10px] uppercase border-b border-stone-200">
                   <tr>
                     <th class="p-3">Seq #</th>
                     <th class="p-3">Timestamp</th>
@@ -1643,15 +1571,15 @@ spec:
                     <th class="p-3">Current Hash (SHA-256)</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-800 text-slate-300 text-[11px]">
+                <tbody class="divide-y divide-stone-100 text-slate-700 text-[11px]">
                   ${chain.map(entry => `
-                    <tr class="hover:bg-slate-850/50 transition">
-                      <td class="p-3 font-bold text-emerald-400">#${entry.sequence_number}</td>
-                      <td class="p-3 text-slate-500">${new Date(entry.timestamp * 1000).toLocaleTimeString()}</td>
-                      <td class="p-3 text-slate-300">${entry.user_email}</td>
-                      <td class="p-3 font-bold text-white">${entry.action}</td>
-                      <td class="p-3 text-slate-400">${entry.resource_type}:${entry.resource_id}</td>
-                      <td class="p-3 text-slate-500 truncate max-w-[200px]" title="${entry.current_hash}">${entry.current_hash}</td>
+                    <tr class="hover:bg-[#faf8f5] transition">
+                      <td class="p-3 font-bold text-emerald-800">#${entry.sequence_number}</td>
+                      <td class="p-3 text-slate-400">${new Date(entry.timestamp * 1000).toLocaleTimeString()}</td>
+                      <td class="p-3 text-slate-800">${entry.user_email}</td>
+                      <td class="p-3 font-bold text-slate-900">${entry.action}</td>
+                      <td class="p-3 text-slate-500">${entry.resource_type}:${entry.resource_id}</td>
+                      <td class="p-3 text-slate-400 truncate max-w-[200px]" title="${entry.current_hash}">${entry.current_hash}</td>
                     </tr>
                   `).join('')}
                 </tbody>
@@ -1682,35 +1610,34 @@ spec:
       const sc = data.executive_scorecard || {};
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">Executive DevOps & Compliance Scorecard</h2>
-              <p class="text-xs text-slate-400">Key DORA metrics, SOC2 compliance posture, and SLA availability</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">Executive DevOps & Compliance Scorecard</h2>
+              <p class="text-xs text-slate-500">Key DORA metrics, SOC2 compliance posture, and SLA availability</p>
             </div>
-            <button onclick="exportReportJSON()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5">
-              <i class="fa-solid fa-download"></i>
-              <span>Export Report (JSON)</span>
+            <button onclick="exportReportJSON()" class="px-3.5 py-2 bg-white hover:bg-stone-50 text-slate-800 border border-stone-300 rounded-lg text-xs font-semibold transition shadow-sm">
+              Export Report (JSON)
             </button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+            <div class="bg-white border border-[#e8e3d8] p-5 rounded-xl space-y-2 shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Security Compliance Grade</span>
-              <div class="text-2xl font-bold text-emerald-400">${sc.security_compliance_grade}</div>
-              <p class="text-xs text-slate-400">Zero Critical/High CVEs & CIS Benchmark adherence</p>
+              <div class="text-2xl font-bold text-emerald-700">${sc.security_compliance_grade}</div>
+              <p class="text-xs text-slate-500">Zero Critical/High CVEs & CIS Benchmark adherence</p>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+            <div class="bg-white border border-[#e8e3d8] p-5 rounded-xl space-y-2 shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Deployment Frequency</span>
-              <div class="text-2xl font-bold text-blue-400">${sc.deployment_frequency}</div>
-              <p class="text-xs text-slate-400">Elite DORA performance tier</p>
+              <div class="text-2xl font-bold text-blue-700">${sc.deployment_frequency}</div>
+              <p class="text-xs text-slate-500">Elite DORA performance tier</p>
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-2">
+            <div class="bg-white border border-[#e8e3d8] p-5 rounded-xl space-y-2 shadow-sm">
               <span class="text-slate-500 text-[11px] font-semibold uppercase">Change Failure Rate</span>
-              <div class="text-2xl font-bold text-purple-400">${sc.change_failure_rate}</div>
-              <p class="text-xs text-slate-400">Mean time to recovery: ${sc.mean_time_to_recovery}</p>
+              <div class="text-2xl font-bold text-purple-700">${sc.change_failure_rate}</div>
+              <p class="text-xs text-slate-500">Mean time to recovery: ${sc.mean_time_to_recovery}</p>
             </div>
           </div>
         </div>
@@ -1734,12 +1661,9 @@ spec:
     async function renderUsersView() {
       if (currentUser.role !== 'ADMIN') {
         document.getElementById('content-area').innerHTML = `
-          <div class="p-8 text-center bg-slate-900 border border-slate-800 rounded-2xl max-w-md mx-auto space-y-3">
-            <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center mx-auto text-xl">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h3 class="text-base font-bold text-white">Access Restricted</h3>
-            <p class="text-xs text-slate-400">User management is strictly restricted to the <strong>ADMIN</strong> role. Your current role is <strong>${currentUser.role}</strong>.</p>
+          <div class="p-8 text-center bg-white border border-[#e8e3d8] rounded-2xl max-w-md mx-auto space-y-3 shadow-sm">
+            <h3 class="text-base font-bold text-slate-900">Access Restricted</h3>
+            <p class="text-xs text-slate-500">User management is strictly restricted to the <strong>ADMIN</strong> role. Your current role is <strong>${currentUser.role}</strong>.</p>
           </div>
         `;
         return;
@@ -1751,21 +1675,20 @@ spec:
       const users = data.users || [];
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6">
+        <div class="space-y-6 max-w-7xl mx-auto">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-xl font-bold text-white tracking-tight">User Administration & RBAC</h2>
-              <p class="text-xs text-slate-400">Manage enterprise user accounts, role bindings, and credentials</p>
+              <h2 class="text-xl font-bold text-slate-900 tracking-tight">User Administration & RBAC</h2>
+              <p class="text-xs text-slate-500">Manage enterprise user accounts, role bindings, and credentials</p>
             </div>
-            <button onclick="openCreateUserModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center space-x-2">
-              <i class="fa-solid fa-user-plus"></i>
-              <span>Create New User</span>
+            <button onclick="openCreateUserModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
+              Create New User
             </button>
           </div>
 
-          <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-            <table class="w-full text-left text-xs text-slate-300">
-              <thead class="bg-slate-850 text-slate-400 text-[10px] uppercase">
+          <div class="bg-white border border-[#e8e3d8] rounded-xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs text-slate-700">
+              <thead class="bg-[#faf7f2] text-slate-600 text-[10px] uppercase border-b border-stone-200">
                 <tr>
                   <th class="p-3">User</th>
                   <th class="p-3">Role</th>
@@ -1774,27 +1697,27 @@ spec:
                   <th class="p-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800">
+              <tbody class="divide-y divide-stone-100">
                 ${users.map(u => `
-                  <tr class="hover:bg-slate-850/50">
+                  <tr class="hover:bg-[#faf8f5]">
                     <td class="p-3">
-                      <div class="font-bold text-white">${u.name}</div>
-                      <div class="text-[11px] text-slate-400 font-mono">${u.email}</div>
+                      <div class="font-bold text-slate-900">${u.name}</div>
+                      <div class="text-[11px] text-slate-500 font-mono">${u.email}</div>
                     </td>
                     <td class="p-3">
                       <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
-                        u.role === 'ADMIN' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
-                        u.role === 'DEVOPS_ENGINEER' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
-                        u.role === 'DEVELOPER' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                        'bg-slate-800 text-slate-400'
+                        u.role === 'ADMIN' ? 'bg-purple-50 text-purple-800 border border-purple-200' :
+                        u.role === 'DEVOPS_ENGINEER' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+                        u.role === 'DEVELOPER' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                        'bg-stone-100 text-slate-700'
                       }">${u.role}</span>
                     </td>
                     <td class="p-3">
-                      <span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.status === 'ACTIVE' ? 'text-emerald-400' : 'text-rose-400'}">${u.status}</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.status === 'ACTIVE' ? 'text-emerald-800 bg-emerald-50' : 'text-rose-800 bg-rose-50'}">${u.status}</span>
                     </td>
-                    <td class="p-3 text-slate-400">${u.last_login ? new Date(u.last_login * 1000).toLocaleTimeString() : 'Never'}</td>
+                    <td class="p-3 text-slate-500">${u.last_login ? new Date(u.last_login * 1000).toLocaleTimeString() : 'Never'}</td>
                     <td class="p-3 text-right space-x-2">
-                      <button onclick="toggleUserStatus('${u.id}')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px]">
+                      <button onclick="toggleUserStatus('${u.id}')" class="px-2.5 py-1 bg-[#faf7f2] hover:bg-[#efe9dc] text-slate-700 rounded text-[11px] font-medium border border-stone-200">
                         ${u.status === 'ACTIVE' ? 'Disable' : 'Enable'}
                       </button>
                     </td>
@@ -1810,34 +1733,34 @@ spec:
     function openCreateUserModal() {
       const modal = document.getElementById('modal-container');
       modal.innerHTML = `
-        <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 class="text-base font-bold text-white">Create Enterprise User</h3>
-            <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        <div class="w-full max-w-md bg-white border border-stone-300 rounded-2xl p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+            <h3 class="text-base font-bold text-slate-900">Create Enterprise User</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">×</button>
           </div>
 
           <form onsubmit="handleCreateUser(event)" class="space-y-3 text-xs">
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Full Name</label>
+              <label class="block text-slate-700 font-semibold mb-1">Full Name</label>
               <input type="text" id="new-user-name" required placeholder="Elena Rostova"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
 
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Email Address</label>
+              <label class="block text-slate-700 font-semibold mb-1">Email Address</label>
               <input type="email" id="new-user-email" required placeholder="elena@enterprise.io"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
 
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Initial Password</label>
+              <label class="block text-slate-700 font-semibold mb-1">Initial Password</label>
               <input type="password" id="new-user-pwd" required placeholder="••••••••••••"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
             </div>
 
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Role Assignment</label>
-              <select id="new-user-role" class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+              <label class="block text-slate-700 font-semibold mb-1">Role Assignment</label>
+              <select id="new-user-role" class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
                 <option value="DEVELOPER">DEVELOPER</option>
                 <option value="DEVOPS_ENGINEER">DEVOPS_ENGINEER</option>
                 <option value="VIEWER">VIEWER</option>
@@ -1845,9 +1768,9 @@ spec:
               </select>
             </div>
 
-            <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg font-medium">Cancel</button>
-              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold">Create User</button>
+            <div class="flex justify-end space-x-3 pt-4 border-t border-stone-200">
+              <button type="button" onclick="closeModal()" class="px-4 py-2 bg-stone-100 text-slate-700 rounded-lg font-medium">Cancel</button>
+              <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold">Create User</button>
             </div>
           </form>
         </div>
@@ -1886,52 +1809,52 @@ spec:
       const st = data.settings || {};
       const container = document.getElementById('content-area');
       container.innerHTML = `
-        <div class="space-y-6 max-w-3xl">
+        <div class="space-y-6 max-w-3xl mx-auto">
           <div>
-            <h2 class="text-xl font-bold text-white tracking-tight">Platform Configuration</h2>
-            <p class="text-xs text-slate-400">Canary rollout thresholds, timeout defaults, and notification webhooks</p>
+            <h2 class="text-xl font-bold text-slate-900 tracking-tight">Platform Configuration</h2>
+            <p class="text-xs text-slate-500">Canary rollout thresholds, timeout defaults, and notification webhooks</p>
           </div>
 
-          <form onsubmit="handleSaveSettings(event)" class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 text-xs">
+          <form onsubmit="handleSaveSettings(event)" class="bg-white border border-[#e8e3d8] rounded-xl p-6 space-y-4 text-xs shadow-sm">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Platform Name</label>
+                <label class="block text-slate-700 font-semibold mb-1">Platform Name</label>
                 <input type="text" id="set-platform-name" value="${st.platform_name || 'Flint Enterprise Platform'}"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
 
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Target Environment</label>
+                <label class="block text-slate-700 font-semibold mb-1">Target Environment</label>
                 <input type="text" id="set-environment" value="${st.environment || 'Production (US-East)'}"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
 
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Canary Step Size (%)</label>
+                <label class="block text-slate-700 font-semibold mb-1">Canary Step Size (%)</label>
                 <input type="number" id="set-canary-step" value="${st.canary_step_percentage || '25'}"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
 
               <div>
-                <label class="block text-slate-400 font-semibold mb-1">Canary Max Failure Rate</label>
+                <label class="block text-slate-700 font-semibold mb-1">Canary Max Failure Rate</label>
                 <input type="text" id="set-canary-threshold" value="${st.canary_failure_threshold || '0.02'}"
-                  class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white">
+                  class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900">
               </div>
             </div>
 
             <div>
-              <label class="block text-slate-400 font-semibold mb-1">Slack Alert Webhook URL</label>
+              <label class="block text-slate-700 font-semibold mb-1">Slack Alert Webhook URL</label>
               <input type="text" id="set-slack-webhook" value="${st.slack_webhook_url || ''}"
-                class="w-full px-3 py-2 bg-slate-850 border border-slate-700 rounded-lg text-white font-mono">
+                class="w-full px-3 py-2 bg-white border border-stone-300 rounded-lg text-slate-900 font-mono">
             </div>
 
             ${currentUser.role === 'ADMIN' || currentUser.role === 'DEVOPS_ENGINEER' ? `
-              <div class="pt-4 border-t border-slate-800 flex justify-end">
-                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition">
+              <div class="pt-4 border-t border-stone-100 flex justify-end">
+                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold transition">
                   Save Settings
                 </button>
               </div>
-            ` : '<p class="text-slate-500 italic text-[11px]">Only ADMIN and DEVOPS_ENGINEER can update settings.</p>'}
+            ` : '<p class="text-slate-400 italic text-[11px]">Only ADMIN and DEVOPS_ENGINEER can update settings.</p>'}
           </form>
         </div>
       `;
@@ -1953,12 +1876,10 @@ spec:
       }
     }
 
-    // Modal Closer
     function closeModal() {
       document.getElementById('modal-container').classList.add('hidden');
     }
 
-    // Initialize application on load
     window.addEventListener('DOMContentLoaded', () => {
       checkExistingSession();
     });
